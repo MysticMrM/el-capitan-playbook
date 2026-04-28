@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>El Capitán — Secure Access</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -586,6 +586,26 @@
     border-bottom: 1px solid rgba(201,168,76,0.07);
   }
   .toc-entry:last-child { border-bottom: none; }
+
+  /* ── TOC entries: clickable ── */
+  .toc-entry {
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+    border-radius: 4px;
+    margin: 0 -8px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .toc-entry:hover {
+    background: rgba(201,168,76,0.08);
+  }
+  .toc-entry:hover .toc-entry-num {
+    opacity: 1;
+  }
+  .toc-entry:hover .toc-entry-text {
+    color: var(--cream);
+  }
   .toc-entry-num {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 16px;
@@ -1348,6 +1368,7 @@
 
     <h2 class="toc-heading">Contents</h2>
     <span class="toc-heading-sub">Eighteen Modules &amp; The Grand Finale</span>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;color:var(--smoke);margin-bottom:2.8rem;opacity:0.8;">↑ Click any module to jump directly to that section</p>
 
     
     <div class="toc-part">
@@ -2976,6 +2997,23 @@
     #pdf-sidebar { width: 200px; }
     .pdf-thumb-page { width: 88px; }
   }
+
+  /* ── Mobile safe area: respect browser chrome (iOS Safari, Chrome on Android) ── */
+  @supports (bottom: env(safe-area-inset-bottom)) {
+    #pdf-nav {
+      bottom: calc(24px + env(safe-area-inset-bottom));
+    }
+    #pdf-sidebar {
+      bottom: env(safe-area-inset-bottom);
+    }
+  }
+  @media (max-width: 600px) {
+    @supports (bottom: env(safe-area-inset-bottom)) {
+      #pdf-nav {
+        bottom: calc(16px + env(safe-area-inset-bottom));
+      }
+    }
+  }
 </style>
 
 
@@ -3191,6 +3229,59 @@
 </script>
 
 
+<script>
+/* ── TOC: make each entry clickable → scroll to the matching section ── */
+(function() {
+  function initTocLinks() {
+    var entries = document.querySelectorAll('.toc-entry');
+    entries.forEach(function(entry) {
+      var numEl = entry.querySelector('.toc-entry-num');
+      if (!numEl) return;
+      var num = numEl.textContent.trim(); /* e.g. "01", "02" */
+
+      entry.style.cursor = 'pointer';
+
+      entry.addEventListener('click', function(e) {
+        e.preventDefault();
+        /* The section IDs are assigned by the PDF nav JS as "pdf-page-01" etc. */
+        var target = document.getElementById('pdf-page-' + num);
+        if (!target) {
+          /* Try without leading zero */
+          target = document.getElementById('pdf-page-' + parseInt(num, 10));
+        }
+        if (target) {
+          var y = target.getBoundingClientRect().top + window.pageYOffset - 24;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      });
+    });
+
+    /* Also wire up the finale block to scroll to the CTA section */
+    var finale = document.querySelector('.toc-finale-block');
+    if (finale) {
+      finale.style.cursor = 'pointer';
+      finale.addEventListener('click', function() {
+        var cta = document.getElementById('pdf-page-cta');
+        if (!cta) cta = document.querySelector('.cta-section');
+        if (cta) {
+          var y = cta.getBoundingClientRect().top + window.pageYOffset - 24;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      });
+    }
+  }
+
+  /* Wait for PDF nav JS to assign section IDs (it runs on DOMContentLoaded/setTimeout 0 too),
+     so we delay slightly to ensure IDs are in place before wiring clicks */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(initTocLinks, 50); });
+  } else {
+    setTimeout(initTocLinks, 50);
+  }
+})();
+</script>
+
+
 
 
 <style>
@@ -3354,6 +3445,7 @@
     var vv = synth.getVoices();
     if (!vv.length) return voice;            /* list empty — keep whatever we had */
     var pref = [
+      /* Desktop — highest quality neural/natural voices */
       'Google US English',
       'Microsoft Guy Online (Natural) - English (United States)',
       'Microsoft Davis Online (Natural) - English (United States)',
@@ -3361,13 +3453,29 @@
       'Microsoft Ryan Online (Natural) - English (United States)',
       'Microsoft David - English (United States)',
       'Microsoft Mark - English (United States)',
+      /* iOS / macOS — built-in high quality voices */
+      'Siri (English (US))',
+      'Siri (English (United States))',
       'Alex',
+      'Fred',
+      'Samantha',
+      'Daniel',
+      'Karen',
+      'Moira',
+      'Veena',
     ];
     for (var i = 0; i < pref.length; i++)
       for (var j = 0; j < vv.length; j++)
         if (vv[j].name === pref[i]) { voice = vv[j]; voiceLocked = true; return voice; }
-    /* Fallback: any en-US — but don't lock so we can upgrade later */
+
+    /* Fallback: prefer en-US enhanced/premium, then any en-US */
     var us = vv.filter(function(v){ return /en.US/i.test(v.lang); });
+    /* On iOS the highest quality voices have "enhanced" or "premium" in their name or are non-compact */
+    var enhanced = us.filter(function(v){ return /enhanced|premium/i.test(v.name); });
+    if (enhanced.length) { voice = enhanced[0]; voiceLocked = true; return voice; }
+    /* Pick en-US that isn't explicitly "compact" */
+    var nonCompact = us.filter(function(v){ return !/compact/i.test(v.name); });
+    if (nonCompact.length) { voice = nonCompact[0]; return voice; }
     if (us.length) { voice = us[0]; return voice; }
     voice = vv[0]; return voice;
   }
@@ -3427,9 +3535,22 @@
       var endIdx = allSpans.length - 1;
 
       if (endIdx >= startIdx) {
-        var ci = chunks.length;
-        chunks.push({ startIdx: startIdx, endIdx: endIdx });
-        for (var k = startIdx; k <= endIdx; k++) spanToChunk[k] = ci;
+        /* FIX-E: Split large elements into ≤80-word sub-chunks.
+           Larger utterances = fewer chunk transitions, smoother continuous reading. */
+        var MAX_WORDS = 80;
+        var totalSpans = endIdx - startIdx + 1;
+        if (totalSpans <= MAX_WORDS) {
+          var ci = chunks.length;
+          chunks.push({ startIdx: startIdx, endIdx: endIdx });
+          for (var k = startIdx; k <= endIdx; k++) spanToChunk[k] = ci;
+        } else {
+          for (var s = startIdx; s <= endIdx; s += MAX_WORDS) {
+            var e = Math.min(s + MAX_WORDS - 1, endIdx);
+            var ci = chunks.length;
+            chunks.push({ startIdx: s, endIdx: e });
+            for (var k = s; k <= e; k++) spanToChunk[k] = ci;
+          }
+        }
       }
     });
   }
@@ -3471,8 +3592,9 @@
     litSpan.classList.add('on');
     var r  = litSpan.getBoundingClientRect();
     var vh = window.innerHeight;
-    if (r.top < vh * 0.22 || r.bottom > vh * 0.78)
-      window.scrollTo({ top: window.pageYOffset + r.top - vh * 0.38, behavior: 'smooth' });
+    /* Only scroll if word is in the top 12% or bottom 18% of viewport — much less aggressive */
+    if (r.top < vh * 0.12 || r.bottom > vh * 0.82)
+      window.scrollTo({ top: window.pageYOffset + r.top - vh * 0.30, behavior: 'smooth' });
   }
 
   /* ── Speak one chunk ── */
@@ -3499,29 +3621,82 @@
     utt.volume = 1.0;
     if (voice) utt.voice = voice;
 
-    /* ── Boundary → highlight ── */
-    utt.addEventListener('boundary', function(ev) {
-      if (ev.name !== 'word') return;
-      var charIdx = ev.charIndex;
-      var acc = 0;
-      for (var wi = 0; wi < words.length; wi++) {
-        var wl = words[wi].length;
-        if (charIdx >= acc && charIdx < acc + wl + 1) {
+    /* ── Time-based highlight fallback for Chrome (boundary events unreliable on desktop) ── */
+    var timerFallback  = null;
+    var chunkStartTime = null;
+    /* FIX-A: Use 160 wpm (closer to real TTS average) and a slight lead bias (-60ms)
+       so the highlight arrives just before the word is spoken, not after. */
+    var totalWords         = words.length;
+    var avgWordMs          = (60000 / 160) / speed;
+    var estimatedDurationMs = totalWords * avgWordMs;
+    var LEAD_BIAS_MS       = 55; /* highlight this many ms early */
+
+    function stopTimer() {
+      if (timerFallback) { clearInterval(timerFallback); timerFallback = null; }
+    }
+
+    function startTimerFallback() {
+      stopTimer();
+      chunkStartTime = Date.now();
+      var lastWi = -1;
+      timerFallback = setInterval(function() {
+        if (!playing) { stopTimer(); return; }
+        /* FIX-B: don't kill the timer the moment the first boundary fires —
+           boundary events can be sporadic. Only stop if we got ≥3 boundary events. */
+        if (boundaryCount >= 3) { stopTimer(); return; }
+        var elapsed = Date.now() - chunkStartTime + LEAD_BIAS_MS;
+        var wi = Math.min(Math.floor((elapsed / estimatedDurationMs) * totalWords), totalWords - 1);
+        if (wi !== lastWi) {
+          lastWi = wi;
           var gi = ch.startIdx + localOff + wi;
           if (gi < allSpans.length) { curGlobal = gi; setLit(allSpans[gi]); }
-          break;
         }
-        acc += wl + 1;
+      }, 60); /* 60ms poll is smoother than 80ms */
+    }
+
+    /* Start timer fallback after 200ms (reduced from 400ms) if no boundary has fired */
+    var timerCheck = setTimeout(function() {
+      if (!playing) return;
+      if (boundaryCount === 0) startTimerFallback();
+    }, 200);
+
+    /* ── Boundary → highlight ── */
+    var boundaryCount = 0;
+    /* Pre-build a char-offset map for the joined text so matching is O(n) not O(n²) */
+    var wordStartChars = [];
+    var acc = 0;
+    for (var bi = 0; bi < words.length; bi++) {
+      wordStartChars.push(acc);
+      acc += words[bi].length + 1; /* +1 for the space separator */
+    }
+
+    utt.addEventListener('boundary', function(ev) {
+      if (ev.name !== 'word') return;
+      boundaryCount++;
+      /* FIX-C: if timer was running but we now have boundary events, stop it */
+      if (boundaryCount === 1 && timerFallback) stopTimer();
+
+      var charIdx = ev.charIndex;
+      /* FIX-D: binary-search style — find rightmost word whose start ≤ charIdx */
+      var wi = 0;
+      for (var k = wordStartChars.length - 1; k >= 0; k--) {
+        if (wordStartChars[k] <= charIdx) { wi = k; break; }
       }
+      var gi = ch.startIdx + localOff + wi;
+      if (gi < allSpans.length) { curGlobal = gi; setLit(allSpans[gi]); }
     });
 
     utt.addEventListener('end', function() {
+      clearTimeout(timerCheck);
+      stopTimer();
       if (!playing) return;
       curGlobal = ch.endIdx + 1;
       speakChunk(ci + 1);
     });
 
     utt.addEventListener('error', function(e) {
+      clearTimeout(timerCheck);
+      stopTimer();
       if (e.error === 'interrupted' || e.error === 'canceled') return;
       /* Skip bad chunk, keep going */
       curGlobal = ch.endIdx + 1;
@@ -3533,6 +3708,7 @@
 
   function finish() {
     playing = false; paused = false;
+    stopStallWatchdog();
     setLit(null); setIcon('idle');
   }
 
@@ -3542,20 +3718,53 @@
   var primed = false;
   function primeSynth(cb) {
     if (primed) { cb(); return; }
-    /* Speak an empty utterance to wake the engine, then run callback */
-    var primer = new SpeechSynthesisUtterance('');
-    primer.volume = 0;
-    primer.addEventListener('end',   function(){ primed = true; cb(); });
-    primer.addEventListener('error', function(){ primed = true; cb(); }); /* still run cb */
-    synth.cancel();
-    synth.speak(primer);
+    /* FIX-F: On iOS, getVoices() may return empty until the first utterance fires.
+       Try to load voices up to 3 times with 150ms gaps before giving up. */
+    var attempts = 0;
+    function tryVoice() {
+      pickVoice();
+      attempts++;
+      if ((!voice || !voiceLocked) && attempts < 3) {
+        setTimeout(tryVoice, 150);
+        return;
+      }
+      /* Speak an empty utterance to wake the engine, then run callback */
+      var primer = new SpeechSynthesisUtterance('\u200B'); /* zero-width space — less likely to glitch */
+      primer.volume = 0;
+      primer.addEventListener('end',   function(){ primed = true; cb(); });
+      primer.addEventListener('error', function(){ primed = true; cb(); });
+      synth.cancel();
+      synth.speak(primer);
+    }
+    tryVoice();
   }
 
   /* ── FIX 5: Chrome pause unreliable — use cancel+resume-from-pos ── */
+  /* FIX-G: Chrome stall watchdog — Chrome sometimes stops speaking without firing 'end'.
+     We watch synth.speaking; if it goes false while we expect it to be true, recover. */
+  var stallWatchdog = null;
+  function startStallWatchdog(ci) {
+    stopStallWatchdog();
+    stallWatchdog = setInterval(function() {
+      if (!playing) { stopStallWatchdog(); return; }
+      if (!synth.speaking && !synth.pending) {
+        /* Synth stopped unexpectedly — Chrome stall. Recover by re-queueing current chunk. */
+        stopStallWatchdog();
+        setTimeout(function(){ if (playing) speakChunk(chunkOf(curGlobal)); }, 80);
+      }
+    }, 1500);
+  }
+  function stopStallWatchdog() {
+    if (stallWatchdog) { clearInterval(stallWatchdog); stallWatchdog = null; }
+  }
+
   function doPlay() {
     playing = true; paused = false;
     setIcon('playing');
-    primeSynth(function(){ speakChunk(chunkOf(curGlobal)); });
+    primeSynth(function(){
+      speakChunk(chunkOf(curGlobal));
+      startStallWatchdog(chunkOf(curGlobal));
+    });
   }
 
   /* ── Public API ── */
@@ -3568,6 +3777,7 @@
       /* Pause: cancel current utterance, save position, mark paused */
       synth.cancel();
       playing = false; paused = true;
+      stopStallWatchdog();
       setIcon('idle');
       return;
     }
@@ -3581,6 +3791,7 @@
     synth.cancel();
     playing = false; paused = false;
     curGlobal = 0;
+    stopStallWatchdog();
     setLit(null); setIcon('idle');
     if (pickMode) ttsCancelPick();
   };
