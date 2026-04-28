@@ -1,0 +1,3769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Capitán — Secure Access</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dark: #8A6820;
+    --cream: #F5EDD8;
+    --cream-dim: #E8E4DC;
+    --tobacco: #1A140C;
+    --tobacco-mid: #2A1F12;
+    --tobacco-light: #3D2E1A;
+    --cigar: #5C3D1A;
+    --smoke: #8A7A65;
+    --ink: #0D0A06;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: #1A140C;
+    background-color: var(--tobacco);
+  }
+
+  body {
+    background-color: #1A140C;
+    background-color: var(--tobacco);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* COVER PAGE */
+  .cover {
+    min-height: 100vh;
+    background-color: #0D0A06;
+    background-color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 2rem;
+    text-align: center;
+    /* Fix mobile Safari overflow+background bug */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(92,61,26,0.4) 0%, transparent 70%);
+  }
+
+  .cover-border {
+    position: absolute;
+    inset: 24px;
+    border: 1px solid rgba(201,168,76,0.3);
+    pointer-events: none;
+  }
+
+  .cover-border::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .cover-ornament {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+  }
+
+  .cover-flag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 2vw, 18px);
+    letter-spacing: 0.5em;
+    color: var(--gold-light);
+    margin-bottom: 1rem;
+    opacity: 0.7;
+  }
+
+  .cover-title-top {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 3.5vw, 26px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cream-dim);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .cover-title-main {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 10vw, 96px);
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.25rem;
+  }
+
+  .cover-title-sub {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 5vw, 52px);
+    letter-spacing: 0.12em;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 2rem;
+  }
+
+  .cover-rule {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1.5rem auto;
+  }
+
+  .cover-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(15px, 2vw, 19px);
+    font-style: italic;
+    color: var(--cream-dim);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  .cover-seal {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgba(201,168,76,0.4);
+    padding: 10px 24px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* CONTENT WRAPPER */
+  .content {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* SECTION */
+  .section {
+    padding: 5rem 0;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .section:last-child { border-bottom: none; }
+
+  .section-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 100px;
+    color: rgba(201,168,76,0.08);
+    line-height: 1;
+    margin-bottom: -40px;
+    letter-spacing: 0.05em;
+  }
+
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    font-weight: 300;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .lead {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px;
+    font-style: italic;
+    color: var(--cream-dim);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    border-left: 3px solid var(--gold);
+    padding-left: 1.5rem;
+  }
+
+  p {
+    color: var(--cream-dim);
+    font-size: 18px;
+    line-height: 1.85;
+    margin-bottom: 1.25rem;
+  }
+
+  /* QUOTE BLOCK */
+  .don-quote {
+    background: var(--tobacco-mid);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-left: 4px solid var(--gold);
+    padding: 2rem 2rem 2rem 2.5rem;
+    margin: 2.5rem 0;
+    position: relative;
+  }
+
+  .don-quote::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    color: rgba(201,168,76,0.2);
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    line-height: 1;
+  }
+
+  .don-quote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: var(--cream);
+    margin: 0;
+  }
+
+  .don-quote .attribution {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-top: 1rem;
+    font-style: normal;
+  }
+
+  /* SECRET BOX */
+  .secret-box {
+    background: linear-gradient(135deg, var(--tobacco-light) 0%, var(--tobacco-mid) 100%);
+    border: 1px solid rgba(201,168,76,0.35);
+    padding: 2rem;
+    margin: 2rem 0;
+    position: relative;
+  }
+
+  .secret-box::before {
+    content: '— CLASSIFIED —';
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--tobacco-light);
+    padding: 0 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+  }
+
+  .secret-box h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--gold-light);
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+  }
+
+  .secret-box p {
+    font-size: 16px;
+    margin-bottom: 0;
+  }
+
+  /* PILLAR LIST */
+  .pillar-list { list-style: none; margin: 2rem 0; }
+
+  .pillar-list li {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .pillar-list li:last-child { border-bottom: none; }
+
+  .pillar-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--gold);
+    opacity: 0.5;
+    line-height: 1;
+    min-width: 36px;
+    padding-top: 4px;
+  }
+
+  .pillar-content h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--cream);
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+  }
+
+  .pillar-content p { font-size: 16px; margin: 0; }
+
+  /* FORMULA */
+  .formula {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 2.5rem 0;
+    padding: 2rem;
+    background: var(--tobacco-mid);
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .formula-item {
+    text-align: center;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid rgba(201,168,76,0.3);
+    min-width: 110px;
+  }
+
+  .formula-item .fi-top {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .formula-item .fi-bot {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--smoke);
+    text-transform: uppercase;
+  }
+
+  .formula-op {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--gold);
+    opacity: 0.5;
+  }
+
+  /* CONSPIRACY GRID */
+  .con-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(201,168,76,0.15);
+    margin: 2rem 0;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .con-cell {
+    background: var(--tobacco);
+    padding: 1.5rem;
+  }
+
+  .con-cell h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--gold-light);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  .con-cell p { font-size: 14px; margin: 0; line-height: 1.65; }
+
+  /* STEPS */
+  .step-list { counter-reset: steps; margin: 2rem 0; }
+
+  .step-item {
+    counter-increment: steps;
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    align-items: start;
+  }
+
+  .step-num {
+    width: 56px;
+    height: 56px;
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .step-body h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    color: var(--cream);
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+    padding-top: 12px;
+  }
+
+  .step-body p { font-size: 16px; margin: 0; }
+
+  /* TRUTH TABLE */
+  .truth-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    font-size: 15px;
+  }
+
+  .truth-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 2px solid rgba(201,168,76,0.4);
+    background: var(--tobacco-mid);
+  }
+
+  .truth-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    color: var(--cream-dim);
+    vertical-align: top;
+  }
+
+  .truth-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  .truth-table .bad { color: #C96060; font-weight: 400; }
+  .truth-table .good { color: #7DB87D; font-weight: 400; }
+
+  /* FINAL CTA */
+  .cta-section {
+    background-color: #0D0A06;
+    background-color: var(--ink);
+    padding: 5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,168,76,0.08) 0%, transparent 70%);
+  }
+
+  .cta-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .cta-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: var(--cream-dim);
+    max-width: 480px;
+    margin: 0 auto 3rem;
+    position: relative;
+  }
+
+  .signature {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-style: italic;
+    color: var(--gold);
+    margin-top: 3rem;
+    opacity: 0.85;
+  }
+
+  .sig-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--smoke);
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
+
+  hr.gold-rule {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 3rem 0;
+    opacity: 0.4;
+  }
+
+  .page-break { page-break-before: always; }
+
+  /* HIGHLIGHT TEXT */
+  .hl { color: var(--gold-light); font-style: italic; }
+
+  /* ── TABLE OF CONTENTS ── */
+  .toc-wrap {
+    padding: 7rem 2rem 7rem;
+    border-bottom: 1px solid rgba(201,168,76,0.12);
+  }
+  .toc-inner {
+    max-width: 620px;
+    margin: 0 auto;
+  }
+  .toc-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 72px);
+    letter-spacing: 0.12em;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 0.15em;
+  }
+  .toc-heading-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    margin-bottom: 3.5rem;
+    display: block;
+  }
+  .toc-part {
+    margin-bottom: 0;
+  }
+  .toc-part-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.4em;
+    color: var(--gold-light);
+    opacity: 0.9;
+    margin-top: 2.2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  .toc-entry {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.42rem 0;
+    border-bottom: 1px solid rgba(201,168,76,0.07);
+  }
+  .toc-entry:last-child { border-bottom: none; }
+  .toc-entry-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    color: var(--gold-light);
+    opacity: 0.7;
+    letter-spacing: 0.05em;
+    min-width: 26px;
+    flex-shrink: 0;
+    line-height: 1;
+    padding-top: 3px;
+  }
+  .toc-entry-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--cream-dim);
+    line-height: 1.55;
+  }
+  .toc-entry-text em {
+    font-style: normal;
+    color: var(--cream);
+  }
+  .toc-finale-block {
+    margin-top: 2.8rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(201,168,76,0.22);
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  .toc-finale-star {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    color: var(--gold);
+    opacity: 0.6;
+    min-width: 26px;
+    flex-shrink: 0;
+    line-height: 1;
+    padding-top: 3px;
+  }
+  .toc-finale-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 15.5px;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.35;
+  }
+  .toc-finale-text small {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-style: normal;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    opacity: 0.7;
+    margin-top: 0.35rem;
+  }
+  @media (max-width: 768px) {
+    .toc-wrap { padding: 4.5rem 1.25rem; }
+    .toc-heading { font-size: 52px; }
+  }
+  /* ── TABLE OF CONTENTS ── */
+
+  @media (max-width: 768px) {
+    html, body {
+      background-color: #0D0A06;
+      background-color: var(--ink);
+      font-size: 19px;
+      overflow-x: hidden;
+    }
+
+    .cover {
+      padding: 3rem 1.25rem;
+      background-color: #0D0A06;
+      background-color: var(--ink);
+      /* força GPU layer — corrige bug de background no Safari mobile */
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+
+    .cover-border {
+      inset: 12px;
+    }
+
+    .cover-border::before {
+      inset: 5px;
+    }
+
+    .content {
+      width: 100%;
+      max-width: 100%;
+      padding: 0 1.25rem;
+      margin: 0 auto;
+      background-color: #0D0A06;
+      background-color: var(--ink);
+    }
+
+    /* Garante que as sections também têm o background correto */
+    .section {
+      padding: 3rem 0;
+      background-color: #0D0A06;
+      background-color: var(--ink);
+    }
+
+    .section-number {
+      font-size: 64px;
+      margin-bottom: -24px;
+    }
+
+    /* Con-grid: força coluna única no mobile */
+    .con-grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* Step-item: reduz coluna do número */
+    .step-item {
+      grid-template-columns: 48px 1fr;
+      gap: 1rem;
+    }
+
+    .step-num {
+      width: 44px;
+      height: 44px;
+      font-size: 22px;
+    }
+
+    /* Formula: garante quebra correta */
+    .formula {
+      gap: 0.5rem;
+      padding: 1.25rem;
+    }
+
+    .formula-item {
+      min-width: 80px;
+      padding: 0.5rem 0.75rem;
+    }
+
+    /* Tabela: scroll horizontal */
+    .truth-table {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .lead {
+      font-size: 21px;
+    }
+
+    .don-quote p {
+      font-size: 19px;
+    }
+
+    .cta-section {
+      background-color: #0D0A06;
+      background-color: var(--ink);
+      padding: 4rem 1.25rem;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+
+    .section-title {
+      font-size: clamp(26px, 8vw, 40px);
+    }
+  }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+
+    @page { size: A4; margin: 0; }
+
+    html, body {
+      width: 100% !important; margin: 0 !important; padding: 0 !important;
+      background: #000000 !important; background-color: #000000 !important;
+      orphans: 4; widows: 4;
+    }
+
+    .cover       { background: #000000 !important; width: 100% !important; justify-content: flex-start !important; padding-top: 4rem !important; }
+    .cta-section { background: #000000 !important; width: 100% !important; }
+    .content     { background: #000000 !important; width: 100% !important; max-width: 100% !important; padding: 0 2rem !important; }
+    .section     { background: #000000 !important; background-color: #000000 !important; }
+
+    /* ── TOC: own page ── */
+    .toc-wrap {
+      page-break-before: always !important;
+      break-before: always !important;
+      page-break-after: always !important;
+      break-after: always !important;
+      background: #000000 !important;
+    }
+
+    /* ── Each module starts on its own page in PDF ── */
+    .section-start {
+      page-break-before: always !important;
+      break-before: always !important;
+    }
+
+    /* ── FIX 1: Chain section headers so they never split ── */
+    .section-number  { page-break-after: avoid !important; break-after: avoid !important; }
+    .section-eyebrow { page-break-before: avoid !important; break-before: avoid !important;
+                       page-break-after:  avoid !important; break-after:  avoid !important; }
+    .section-title   { page-break-before: avoid !important; break-before: avoid !important;
+                       page-break-after:  avoid !important; break-after:  avoid !important;
+                       page-break-inside: avoid !important; break-inside: avoid !important; }
+    .lead            { page-break-before: avoid !important; break-before: avoid !important;
+                       page-break-inside: avoid !important; break-inside: avoid !important; }
+    h3, h4           { page-break-after:  avoid !important; break-after:  avoid !important; }
+
+    /* When a section header lands at top of page, give it breathing room */
+    .section-number  { padding-top: 2rem; }
+
+    /* ── FIX 2: don-quote ── */
+    .don-quote {
+      position: static !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+    .don-quote::before { display: none !important; }
+
+    /* secret-box same issue */
+    .secret-box {
+      position: static !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+    .secret-box::before { display: none !important; }
+
+    /* ── FIX 3: con-grid ── */
+    .con-grid {
+      display: block !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+    .con-cell {
+      display: block !important;
+      margin-bottom: 0.75rem;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    /* ── Other small elements ── */
+    .formula        { page-break-inside: avoid !important; break-inside: avoid !important; }
+    .step-item      { page-break-inside: avoid !important; break-inside: avoid !important; }
+    .pillar-list li { page-break-inside: avoid !important; break-inside: avoid !important; }
+    .truth-table    { page-break-inside: avoid !important; break-inside: avoid !important; }
+    .truth-table tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+
+    p { orphans: 3; widows: 3; }
+  }
+</style>
+  <style>
+    /* ── Gate overlay — fixed on top, playbook renders fully underneath ── */
+    #gate-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background-color: #F2F3F5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity 0.3s ease;
+    }
+    #gate-overlay::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    #gate-overlay.fading {
+      opacity: 0;
+      pointer-events: none;
+    }
+#gate-overlay *,
+#gate-overlay *::before,
+#gate-overlay *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+
+#gate-overlay {
+      --bg:           #F2F3F5;
+      --surface:      #FFFFFF;
+      --border:       #D8DBE0;
+      --border-focus: #1A56DB;
+      --text:         #111928;
+      --text-sub:     #6B7280;
+      --text-dim:     #9CA3AF;
+      --accent:       #1A56DB;
+      --accent-hover: #1648C0;
+      --red:          #E02424;
+      --lock-bg:      #EBF5FF;
+      --badge-bg:     #F9FAFB;
+      --badge-border: #E5E7EB;
+    }
+
+
+#gate-overlay,
+#gate-overlay {
+      min-height: 100%;
+      background-color: var(--bg);
+      font-family: 'IBM Plex Sans', system-ui, sans-serif;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+
+
+
+#gate-overlay .wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+    }
+
+
+#gate-overlay .doc-bar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+
+#gate-overlay .dots { display: flex; gap: 6px; }
+
+
+#gate-overlay .dot { width: 11px; height: 11px; border-radius: 50%; }
+
+
+#gate-overlay .dot-r { background: #FC635D; }
+
+
+#gate-overlay .dot-y { background: #FDBC40; }
+
+
+#gate-overlay .dot-g { background: #34C84A; }
+
+
+#gate-overlay .doc-bar .filename {
+      margin-left: 8px;
+      font-size: 0.72rem;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--text-sub);
+      letter-spacing: 0.02em;
+      flex: 1;
+    }
+
+
+#gate-overlay .doc-bar .badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #92400E;
+      background: #FEF3C7;
+      border: 1px solid #FCD34D;
+      border-radius: 4px;
+      padding: 2px 7px;
+    }
+
+
+#gate-overlay .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      overflow: hidden;
+      box-shadow:
+        0 1px 3px rgba(0,0,0,0.06),
+        0 4px 16px rgba(0,0,0,0.06);
+    }
+
+
+#gate-overlay .lock-header {
+      background: var(--lock-bg);
+      border-bottom: 1px solid #BFDBFE;
+      padding: 28px 32px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+
+#gate-overlay .lock-icon-wrap {
+      width: 44px;
+      height: 44px;
+      background: white;
+      border: 1px solid #BFDBFE;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(26,86,219,0.1);
+    }
+
+
+#gate-overlay .lock-icon-wrap svg {
+      width: 22px;
+      height: 22px;
+      color: var(--accent);
+    }
+
+
+#gate-overlay .lock-header-text h1 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 3px;
+    }
+
+
+#gate-overlay .lock-header-text p {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+
+#gate-overlay .form-body { padding: 24px 32px 28px; }
+
+
+#gate-overlay .doc-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 22px;
+    }
+
+
+#gate-overlay .doc-name svg {
+      width: 18px;
+      height: 18px;
+      color: #6B7280;
+      flex-shrink: 0;
+    }
+
+
+#gate-overlay .doc-name span {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+
+#gate-overlay .field-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 7px;
+    }
+
+
+#gate-overlay .input-wrap { position: relative; margin-bottom: 6px; }
+
+
+#gate-overlay .input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: var(--text-dim);
+      pointer-events: none;
+      transition: color 0.15s;
+    }
+
+
+#gate-overlay input[type="text"] {
+      width: 100%;
+      background: #FAFAFA;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.92rem;
+      letter-spacing: 0.06em;
+      padding: 10px 14px 10px 38px;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      -webkit-appearance: none;
+    }
+
+
+#gate-overlay input[type="text"]:focus {
+      border-color: var(--border-focus);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(26,86,219,0.12);
+    }
+
+
+#gate-overlay input[type="text"]::placeholder {
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+      font-size: 0.85rem;
+    }
+
+
+#gate-overlay .error-msg {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--red);
+      margin-top: 7px;
+    }
+
+
+#gate-overlay .error-msg svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+
+#gate-overlay .btn {
+      width: 100%;
+      margin-top: 18px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      padding: 11px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+
+#gate-overlay .btn svg { width: 16px; height: 16px; }
+
+
+#gate-overlay .btn:hover:not(:disabled) { background: var(--accent-hover); }
+
+
+#gate-overlay .btn:active:not(:disabled) { transform: scale(0.99); }
+
+
+#gate-overlay .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+
+#gate-overlay .spinner {
+      display: none;
+      width: 15px;
+      height: 15px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+
+#gate-overlay .card-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 32px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      background: #FAFAFA;
+    }
+
+
+#gate-overlay .card-footer svg {
+      width: 14px;
+      height: 14px;
+      color: #D97706;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+
+#gate-overlay .card-footer p {
+      font-size: 0.72rem;
+      color: var(--text-sub);
+      line-height: 1.55;
+    }
+
+
+#gate-overlay .card-footer p strong { color: var(--text); font-weight: 600; }
+
+
+#gate-overlay .meta {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+
+#gate-overlay .meta svg { width: 14px; height: 14px; color: var(--text-dim); }
+
+
+#gate-overlay .meta span { font-size: 0.7rem; color: var(--text-dim); }
+
+
+@keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-6px); }
+      40%     { transform: translateX(6px); }
+      60%     { transform: translateX(-4px); }
+      80%     { transform: translateX(4px); }
+    }
+
+
+#gate-overlay .shake { animation: shake 0.38s ease; }
+
+
+  </style>
+</head>
+<body>
+
+<div id="gate-overlay">
+<div class="wrap">
+
+    <div class="doc-bar">
+      <div class="dots">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+      </div>
+      <span class="filename">el-capitan-playbook.pdf</span>
+      <span class="badge">Protected</span>
+    </div>
+
+    <div class="card">
+
+      <div class="lock-header">
+        <div class="lock-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div class="lock-header-text">
+          <h1>This document is password protected</h1>
+          <p>Enter your access token to open and view the content.</p>
+        </div>
+      </div>
+
+      <div class="form-body">
+
+        <div class="doc-name">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          <span>El Capitán's Ultimate Wealth Playbook</span>
+        </div>
+
+        <label class="field-label" for="token">Access Token</label>
+
+        <div class="input-wrap">
+          <input
+            type="text"
+            id="token"
+            placeholder="XXXXX-XXXXX-XXXXX"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+          </svg>
+        </div>
+
+        <div class="error-msg" id="err">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span id="err-text">Incorrect token. Please check your purchase confirmation.</span>
+        </div>
+
+        <button class="btn" id="btn" onclick="unlock()">
+          <div class="spinner" id="spinner"></div>
+          <svg id="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <span id="btn-text">Unlock Document</span>
+        </button>
+
+      </div>
+
+      <div class="card-footer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <p>
+          <strong>This is your exclusive access token — do not share it with strangers.</strong>
+          This token may contain information linked to your purchase and identity.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="meta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <span>Secured · El Capitán Publishing</span>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="cover">
+  <div class="cover-border"></div>
+  <p class="cover-flag">REPÚBLICA DE CUBA &nbsp;·&nbsp; EST. 1958</p>
+  <p class="cover-ornament">A Private Document — Not For Sale In Stores</p>
+  <div class="cover-rule"></div>
+  <p class="cover-title-top">El Capitán Presents</p>
+  <h1 class="cover-title-main">EL CAPITÁN'S</h1>
+  <p class="cover-title-sub">Ultimate Wealth Playbook</p>
+  <div class="cover-rule"></div>
+  <p class="cover-subtitle">The unfiltered truth about money, power, and how the elite have operated in silence for centuries. What they fear you learning. What they pray you never read.</p>
+  <div class="cover-seal">🔒 &nbsp; For Serious Eyes Only &nbsp; 🔒</div>
+</div>
+
+
+<div class="toc-wrap">
+  <div class="toc-inner">
+
+    <h2 class="toc-heading">Contents</h2>
+    <span class="toc-heading-sub">Eighteen Modules &amp; The Grand Finale</span>
+
+    
+    <div class="toc-part">
+      <div class="toc-part-label">
+        Part I
+        <span>The Foundation</span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">01</span>
+        <span class="toc-entry-text">The Mindset <em>They Stole</em> From You</span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">02</span>
+        <span class="toc-entry-text">The Money <em>Conspiracy</em> — What Banks Never Tell You</span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">03</span>
+        <span class="toc-entry-text">The Don's Asset Hierarchy — <em>Where Wealth Actually Lives</em></span>
+      </div>
+    </div>
+
+    
+    <div class="toc-part">
+      <div class="toc-part-label">
+        Part II
+        <span>The Build</span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">04</span>
+        <span class="toc-entry-text">The First $1,000 — <em>Where Every Empire Begins</em></span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">05</span>
+        <span class="toc-entry-text">The $1K–$10K Game — <em>Small Money, Big Thinking</em></span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">06</span>
+        <span class="toc-entry-text">The $10K–$100K Game — <em>The Leverage Threshold</em></span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">07</span>
+        <span class="toc-entry-text">The $100K+ Game — <em>Real Estate &amp; Dynasty Mode</em></span>
+      </div>
+    </div>
+
+    
+    <div class="toc-part">
+      <div class="toc-part-label">
+        Part III
+        <span>The System</span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">08</span>
+        <span class="toc-entry-text">How <em>Wealth Actually Moves</em> — The Shadow Economy</span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">09</span>
+        <span class="toc-entry-text">The Architect's Move — <em>Systematizing Your Empire</em></span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">10</span>
+        <span class="toc-entry-text">Protecting What You Build — <em>The Don's Defense System</em></span>
+      </div>
+    </div>
+
+    
+    <div class="toc-part">
+      <div class="toc-part-label">
+        Part IV
+        <span>The World</span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">11</span>
+        <span class="toc-entry-text">The Diplomacy of Money — <em>Networking &amp; Etiquette</em></span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">12</span>
+        <span class="toc-entry-text">Geographic Arbitrage — <em>Living Like a Don</em></span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">13</span>
+        <span class="toc-entry-text">Elite Crypto-Assets — <em>The Digital Gold</em></span>
+      </div>
+    </div>
+
+    
+    <div class="toc-part">
+      <div class="toc-part-label">
+        Part V
+        <span>The Dynasty</span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">14</span>
+        <span class="toc-entry-text">Generational Intelligence — <em>Psychology of the Heir</em></span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">15</span>
+        <span class="toc-entry-text">The Art of the Exit — <em>Selling, Timing &amp; Liquidity</em></span>
+      </div>
+    </div>
+
+    
+    <div class="toc-part">
+      <div class="toc-part-label">
+        Part VI
+        <span>The Man</span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">16</span>
+        <span class="toc-entry-text">Health Capital — <em>The Body as the Primary Asset</em></span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">17</span>
+        <span class="toc-entry-text">The Psychology of Enough — <em>Winning the Inner Game</em></span>
+      </div>
+      <div class="toc-entry">
+        <span class="toc-entry-num">18</span>
+        <span class="toc-entry-text">The Long Game — <em>Building a Name That Outlasts the Money</em></span>
+      </div>
+    </div>
+
+    
+    <div class="toc-finale-block">
+      <span class="toc-finale-star">★</span>
+      <span class="toc-finale-text">
+        What My Grandfather Taught Me as a Boy
+        <small>The Grand Finale — Five Laws. Three Generations. One Code.</small>
+      </span>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="content">
+  <div class="section">
+    <p class="section-number">00</p>
+    <p class="section-eyebrow">A word from the Don</p>
+    <h2 class="section-title">Before You <em>Read This</em></h2>
+    <div class="lead">
+      My grandfather left Havana with a single leather suitcase, a Cuban cigar, and one piece of paper with five rules written in ink. That paper is worth more than any MBA in the world.
+    </div>
+    <p>What you're holding is not a book about getting rich quick. Those are traps — built by the very people who want you to keep working for them. This is a playbook about thinking differently. About seeing the game that has been running for centuries, while most people play by rules they didn't even agree to.</p>
+    <p>I've watched families rise and fall. I've sat in rooms where the real decisions were made — not on Wall Street, but in private dining rooms, in cigar lounges, in back offices that don't appear on any map. The men who truly run the financial world don't tweet. They don't post. They <em>own</em>.</p>
+    <p>This playbook is everything I know, distilled. Eighteen modules and a final chapter I have never shared before. No fluff. No filler. Only the truth that the wealthy guard so jealously they never write it down.</p>
+    <p>Until now.</p>
+
+    <div class="don-quote">
+      <p>The poor work for money. The middle class saves money. The wealthy make money work — and the elite make the <em>rules</em> of money itself.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <p class="section-number">01</p>
+    <p class="section-eyebrow">Module One</p>
+    <h2 class="section-title">The Mindset <em>They Stole</em> From You</h2>
+    <div class="lead">You were not born poor. You were taught to be poor. There is a profound difference — and everything starts here.
+    </div>
+
+    <p>From the moment you entered school, a program was installed in your mind. Go to class. Get grades. Get a job. Get a pension. Retire at 65. That program has one purpose: to produce obedient workers for a system designed to make other people wealthy.</p>
+
+    <p>Consider this: the public school system in its modern form was designed in the 19th century to train factory workers — to follow instructions, to sit still, to think inside the box. The curriculum hasn't changed fundamentally since. They teach you algebra. They never teach you how compound interest is used against you. They teach you history. They never teach you how to read a balance sheet.</p>
+
+    <div class="secret-box">
+      <h4>The Scarcity Lie</h4>
+      <p>The wealthy think in abundance — there is always more money, more opportunity, more leverage. The poor and middle class think in scarcity — saving cents, fearing risk, protecting what little they have. Scarcity thinking is not natural. It is installed. Every advertisement you see is designed to make you feel lacking. Every news broadcast is designed to make you feel afraid. Fear and lack make you a perfect consumer — and a perfect employee.</p>
+    </div>
+
+    <p>The first shift you must make is from employee mindset to owner mindset. An employee asks: <span class="hl">"How much do I get paid?"</span> An owner asks: <span class="hl">"How much does this asset earn while I sleep?"</span> These are fundamentally different questions — and they lead to fundamentally different lives.</p>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The Four Wealth Mentalities</h3>
+    <ul class="pillar-list">
+      <li>
+        <span class="pillar-num">I</span>
+        <div class="pillar-content">
+          <h4>Survival Thinking</h4>
+          <p>Living paycheck to paycheck. Every dollar spent the moment it arrives. No concept of money as a tool — only as something that goes away. This is where most people live their entire lives.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">II</span>
+        <div class="pillar-content">
+          <h4>Security Thinking</h4>
+          <p>Saving money, avoiding risk, trusting the bank. This feels responsible — and it is a trap. Your savings account earns 0.5% while inflation runs at 3–6%. You are losing money while feeling safe.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">III</span>
+        <div class="pillar-content">
+          <h4>Leverage Thinking</h4>
+          <p>Using money, time, and systems to multiply effort. Every dollar should work for you. Every hour you spend should create more hours of passive output. This is where wealth begins.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">IV</span>
+        <div class="pillar-content">
+          <h4>Legacy Thinking</h4>
+          <p>Building structures that outlive you. Old money doesn't think in years — it thinks in generations. Every decision is filtered through: <em>what does this look like in 50 years?</em></p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  
+  <div class="section">
+    <p class="section-number">02</p>
+    <p class="section-eyebrow">Module Two</p>
+    <h2 class="section-title">The Money <em>Conspiracy</em> — What Banks Never Tell You</h2>
+    <div class="lead">Money is not what they told you it is. Understanding what it actually is — and who controls it — is the beginning of financial freedom.
+    </div>
+
+    <p>Here is a truth that most people never learn: the money in your bank account does not fully exist. When you deposit $10,000, the bank is legally permitted to lend out $90,000 against it. This is called <span class="hl">fractional reserve banking</span>. Your money creates nine times its value — for the bank. Not for you.</p>
+
+    <p>Central banks — the Federal Reserve in the USA, the ECB in Europe — operate outside the normal democratic chain of accountability. The Fed is a hybrid institution: created by Congress, but run by a board that answers to no elected official and whose decisions cannot be reversed by any vote. They issue currency, set interest rates, and control the entire money supply. When they print new money, they dilute the value of every dollar in your pocket. This is inflation. And inflation is the most elegant tax ever designed, because most people never blame the right party.</p>
+
+    <div class="con-grid">
+      <div class="con-cell">
+        <h4>What they tell you</h4>
+        <p>Save your money in the bank. It's safe. It earns interest. The bank protects your deposits.</p>
+      </div>
+      <div class="con-cell">
+        <h4>What actually happens</h4>
+        <p>The bank lends your money at 8–20% interest and pays you 0.5%. The spread is their profit. You are the product.</p>
+      </div>
+      <div class="con-cell">
+        <h4>What they tell you</h4>
+        <p>Inflation is caused by consumers spending too much, by wages being too high, by demand outpacing supply.</p>
+      </div>
+      <div class="con-cell">
+        <h4>What actually happens</h4>
+        <p>Inflation is primarily caused by governments printing currency. The rich convert cash to assets before this happens. You are left holding devalued paper.</p>
+      </div>
+      <div class="con-cell">
+        <h4>What they tell you</h4>
+        <p>The stock market is the best place for ordinary people to build wealth. Index funds are safe and reliable — just set it and forget it.</p>
+      </div>
+      <div class="con-cell">
+        <h4>What actually happens</h4>
+        <p>Institutional investors move markets before retail money ever arrives. Index funds are useful as a passive base layer — but they are a floor, not a ceiling. The wealthy use them as one tool among many, not as a wealth-building strategy on their own.</p>
+      </div>
+    </div>
+
+    <div class="don-quote">
+      <p>My grandfather told me: "Son, never keep your wealth where someone else makes the rules." He had a very specific idea of what that meant — and it had nothing to do with banks. The next module will show you exactly what he meant.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The Wealth-Inflation Protection Ladder</h3>
+    <p>When currency loses value, assets hold or gain it. Here is how you move your wealth off the ground before the flood:</p>
+
+    <table class="truth-table">
+      <thead>
+        <tr>
+          <th>Asset Class</th>
+          <th>Inflation Protection</th>
+          <th>What the Wealthy Do</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cash in savings</td>
+          <td class="bad">None — loses value</td>
+          <td>Hold minimum; only for liquidity</td>
+        </tr>
+        <tr>
+          <td>Bonds / CDs</td>
+          <td class="bad">Weak — often below inflation</td>
+          <td>Used only for collateral, not growth</td>
+        </tr>
+        <tr>
+          <td>Stocks / Index funds</td>
+          <td style="color:var(--gold)">Moderate</td>
+          <td>Passive base layer; not primary wealth</td>
+        </tr>
+        <tr>
+          <td>Real estate</td>
+          <td class="good">Strong — appreciates + cash flows</td>
+          <td>Core of every old-money portfolio</td>
+        </tr>
+        <tr>
+          <td>Business ownership</td>
+          <td class="good">Very strong — prices adjust with inflation</td>
+          <td>The primary engine of dynastic wealth</td>
+        </tr>
+        <tr>
+          <td>Hard assets (gold, land, art)</td>
+          <td class="good">Strongest — store of value for centuries</td>
+          <td>Generational preservation of wealth</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+  <div class="section">
+    <p class="section-number">03</p>
+    <p class="section-eyebrow">Module Three</p>
+    <h2 class="section-title">Old Money Secrets — <em>Assets Over Everything</em></h2>
+    <div class="lead">The difference between old money and new money is not how much you earn. It is what you do with what you earn — and whether it grows while you sleep.
+    </div>
+
+    <p>Most people who win the lottery are broke within five years. Most professional athletes who earn millions end up bankrupt by 40. This is not because they are stupid. It is because high income without financial intelligence is just a faster way to be poor. The money comes in through the front door and runs out the back — cars, houses too big, friends who need "help," investments they don't understand.</p>
+
+    <p>Old money families — whether Cuban, European, or American — operate on one principle above all others: <span class="hl">never consume your capital</span>. The principal is untouchable. You live on the yield. You reinvest the excess. Generation after generation.</p>
+
+    <div class="secret-box">
+      <h4>The Golden Equation of Old Money</h4>
+      <p>Assets → generate Income → that buys more Assets → that generate more Income. They never break this cycle by converting income into liabilities (cars, jewelry, luxury that depreciates). New money buys things that look rich. Old money buys things that make them richer.</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The Don's Asset Hierarchy</h3>
+
+    <ul class="pillar-list">
+      <li>
+        <span class="pillar-num">1</span>
+        <div class="pillar-content">
+          <h4>Real Estate — the Foundation</h4>
+          <p>Land is the original wealth. It is finite — they are not making more of it. Real estate generates rental income, appreciates over time, can be leveraged for more purchases, and provides tax advantages that W-2 income never will. The wealthy don't just buy a home — they buy buildings, warehouses, farmland, parking lots. Anything that generates monthly cash flow.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">2</span>
+        <div class="pillar-content">
+          <h4>Business Ownership — the Engine</h4>
+          <p>The most powerful wealth builder in history. A business pays you first, pays its expenses, and then pays taxes on what's left. A salary pays taxes first, then expenses, and you keep whatever remains. The tax code was written by business owners — for business owners. They left you out on purpose.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">3</span>
+        <div class="pillar-content">
+          <h4>Intellectual Property — the Multiplier</h4>
+          <p>A book written once sells forever. A course recorded once enrolls thousands. Software built once runs for years. IP breaks the direct link between your hours and your income — and that link is the cage most people spend their lives inside.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">4</span>
+        <div class="pillar-content">
+          <h4>Equity & Ownership Stakes — the Network</h4>
+          <p>Owning pieces of other businesses. Private equity. Angel investing. Small stakes in restaurants, tech companies, local businesses run by talented people you believe in. The wealthy don't just run businesses — they own pieces of dozens of businesses run by others.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">5</span>
+        <div class="pillar-content">
+          <h4>Relationships — the Asset They Never Put on Paper</h4>
+          <p>The most valuable thing in my grandfather's network was not what he owned. It was who he knew. A phone call that opens a door no money can buy. A favor owed by the right person at the right time. Relationships are capital — and old money families invest in them more carefully than anything else. This is not about collecting contacts. It is about mastering the invisible social codes that determine who gets access and who stays outside. Module 11 covers this in full — the etiquette, the strategy, and the long game of building a network that genuinely compounds.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  
+  <div class="section">
+    <p class="section-number">04</p>
+    <p class="section-eyebrow">Module Four</p>
+    <h2 class="section-title">Starting From Zero — <em>The First $1,000</em></h2>
+    <div class="lead">Most people think you need money to make money. That is exactly what they want you to believe. You need something far more dangerous than money — you need a decision.
+    </div>
+
+    <p>Every fortune in history started with a moment someone looked at nothing and decided it was enough to begin. The wealthy do not wait for conditions to be perfect. They understand that the first $1,000 is not about the money — it is about <span class="hl">proving to yourself that you can create something from nothing</span>. That proof changes your brain permanently.</p>
+
+    <p>The machine doesn't care where the first fuel comes from. Scraped together from selling old electronics. Earned in a weekend doing something you already know how to do. Redirected from thirty days of cutting what you never needed. The origin doesn't matter. The motion matters.</p>
+
+    <div class="secret-box">
+      <h4>The 72-Hour Audit</h4>
+      <p>Pull your last three months of bank and card statements. Highlight every recurring charge. Then highlight every purchase over $50 that you do not remember making. In the average American household, this exercise reveals $300–$700 per month in spending that produces zero joy, zero assets, and zero return. That money, redirected for 60 days, is your first $1,000. It was already there. It was just disappearing on autopilot.</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The Zero-to-$1,000 Protocol</h3>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Liquidate the Dormant</h4>
+          <p>Walk through your home and ask one question for every object: "Would I buy this today?" If the answer is no, sell it. Clothes, electronics, furniture, equipment, books, instruments. The average home contains $2,000–$5,000 in dormant assets sitting in closets. This is not poverty — this is how every wealthy person has restarted from zero. They sell the past to fund the future.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Invoice a Skill Within 7 Days</h4>
+          <p>You already know how to do something someone will pay for. Writing. Fixing. Designing. Translating. Cleaning. Teaching. Moving. The only difference between you and a freelancer is that the freelancer sent the email. Post one offer, in one place, today. Your first $200 freelance payment is worth more than any course about how to freelance — because it eliminates the doubt that was always the real obstacle.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Cut Three Things and Redirect the Savings</h4>
+          <p>Cancel three subscriptions, reduce one recurring expense, and stop one lifestyle habit for 30 days. The exact amount is less important than the action: move the money to a separate account the moment it is freed, before it disappears into something else. This is not about deprivation — it is about redirecting money that is already leaving your hands toward something that will grow instead of vanish. The system for automating this properly comes in the next module. For now, the only goal is to create the first pool of seed capital and leave it alone.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Touch Nothing for 30 Days</h4>
+          <p>Once you reach $1,000, you will feel a pull — a celebration, a treat, a "one-time" splurge. This is the trap. That $1,000 is not spending money. It is seed capital. It is the first brick in a wall that will eventually protect your entire life. Let it sit. Let it prove to you that you can hold money. This discipline, this ability to leave money alone, is rarer than most people realize — and it is the foundation of everything that follows.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="don-quote">
+      <p>My grandfather arrived in Miami with $400 in his shoe. He did not spend a single dollar of it until he found something it could multiply into. That $400 became a duplex. That duplex became an empire. The discipline to not spend is the skill no school will ever teach you.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <p class="section-number">05</p>
+    <p class="section-eyebrow">Module Five</p>
+    <h2 class="section-title">The $1K–$10K Game — <em>Small Money, Big Thinking</em></h2>
+    <div class="lead">One thousand dollars is not enough to invest. It is enough to practice. And practice is the only way the game is won.
+    </div>
+
+    <p>The $1,000-to-$10,000 phase is where most people either build momentum or stall permanently. It is the most psychologically difficult stage — because you have enough to make mistakes that hurt, but not enough to make moves that feel significant. The wealthy understand that this phase is not about returns. It is about <span class="hl">building the habits, the accounts, and the education</span> that $100,000 will later demand of you.</p>
+
+    <p>Every $10,000 earner who becomes a millionaire looks back and says the same thing: the habits I built with small money are identical to the habits I use with large money. The scale changes. The discipline doesn't. This is also the phase where you begin to build structure — because a disorganized $10,000 disappears faster than a disorganized $1,000 ever could.</p>
+
+    <div class="con-grid">
+      <div class="con-cell">
+        <h4>What broke people do with $5,000</h4>
+        <p>Upgrade the car. Take a vacation. Buy a wardrobe update. Invest $500 in a cryptocurrency tip from a friend. End the year with less than they started.</p>
+      </div>
+      <div class="con-cell">
+        <h4>What the wealthy do with $5,000</h4>
+        <p>Put $2,500 in a high-yield account (emergency buffer). Put $1,500 in a broad index fund. Put $1,000 into the first income-generating experiment. Leave all of it alone.</p>
+      </div>
+      <div class="con-cell">
+        <h4>What broke people do with their second income</h4>
+        <p>Spend it. After all — the bills are covered by the main job. This is extra. This is fun money. This is the moment the trap closes.</p>
+      </div>
+      <div class="con-cell">
+        <h4>What the wealthy do with their second income</h4>
+        <p>Reinvest 100% of it until it equals the first income. Then reinvest 80%. This is how multiple income streams are built — not by earning more, but by never consuming the new stream before it matures.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The $1K–$10K Deployment Map</h3>
+
+    <table class="truth-table">
+      <thead>
+        <tr>
+          <th>Move</th>
+          <th>Capital Required</th>
+          <th>What It Teaches You</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>High-yield savings account</td>
+          <td>$500+</td>
+          <td>That money earns money passively; discipline to leave it alone</td>
+        </tr>
+        <tr>
+          <td>First index fund purchase (S&amp;P 500)</td>
+          <td>$500–$1,000</td>
+          <td>How markets move; the power of not reacting; compounding</td>
+        </tr>
+        <tr>
+          <td>Launch a micro-service or digital product</td>
+          <td>$0–$500</td>
+          <td>That you can create income from skill; pricing; customer psychology</td>
+        </tr>
+        <tr>
+          <td>Buy and flip one physical item (furniture, electronics)</td>
+          <td>$100–$500</td>
+          <td>The spread between buy and sell; the foundation of every trading mind</td>
+        </tr>
+        <tr>
+          <td>Invest in one course or certification that raises your income</td>
+          <td>$500–$2,000</td>
+          <td class="good">The highest ROI available at this stage — investing in yourself</td>
+        </tr>
+        <tr>
+          <td>Open a Roth IRA and begin automatic contributions</td>
+          <td>$50/month+</td>
+          <td>Tax-advantaged compounding; the structure the wealthy use from day one</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="secret-box">
+      <h4>The Account Architecture Nobody Teaches You</h4>
+      <p>The wealthy do not keep all their money in one account. They separate money by purpose — and that separation creates psychological protection. Open four accounts: (1) Operating — your daily expenses. (2) Buffer — 3-month emergency fund, untouchable. (3) Investment — money that never comes back out. (4) Opportunity — cash reserved for deals when they appear. Money that knows its purpose behaves differently than money sitting in a pile. The pile always gets spent. The system never does.</p>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <p class="section-number">06</p>
+    <p class="section-eyebrow">Module Six</p>
+    <h2 class="section-title">The $10K–$100K Game — <em>The Leverage Threshold</em></h2>
+    <div class="lead">Ten thousand dollars is the number where the rules change. Below this, you are saving. Above this, you are deploying. The wealthy know the difference — and they treat the crossing of this line with ceremony.
+    </div>
+
+    <p>$10,000 is the first number that institutions take seriously. It is the minimum for certain investment vehicles. It is the point where private lenders begin conversations. It is the amount that makes the first small real estate move possible in certain markets. And critically — it is the <span class="hl">threshold where leverage begins to work for you</span> instead of against you.</p>
+
+    <p>Leverage, properly used, is the most powerful force in wealth building. When a bank lends you $90,000 against your $10,000 to buy a $100,000 property — and that property earns $12,000 per year in rent — you are not earning 12% on $100,000. You are earning 120% on your actual $10,000. This is the math they never put in school. This is why the wealthy love debt — the right kind, used the right way.</p>
+
+    <div class="secret-box">
+      <h4>The Difference Between Good Debt and Bad Debt</h4>
+      <p>Bad debt pays for things that lose value and produce no income: car loans, credit cards, personal loans for vacations. Every dollar of bad debt costs you twice — the principal and the interest, with nothing to show. Good debt buys assets that generate more income than the debt costs: a rental property, business equipment, an investment that yields above the interest rate. The wealthy carry enormous amounts of debt — and almost none of it is bad debt. The poor carry enormous amounts of debt — and almost none of it is good debt. Same word. Opposite results.</p>
+      <p style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(201,168,76,0.2);margin-bottom:0;"><strong style="color:var(--gold-light);font-family:'Playfair Display',serif;">A word on sequence before you proceed:</strong> If you own a business generating less than $10,000 per month in revenue, the highest-return investment available to you is almost certainly more capital into that business — not into REITs or equity stakes elsewhere. The moves below are for capital that has genuinely outgrown what your primary business can absorb. Know which situation you are in.</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">Four Moves at the $10K–$100K Level</h3>
+
+    <ul class="pillar-list">
+      <li>
+        <span class="pillar-num">I</span>
+        <div class="pillar-content">
+          <h4>REITs — Real Estate Without the Keys</h4>
+          <p>Real Estate Investment Trusts allow you to own fractional shares of income-producing properties — apartment complexes, warehouses, shopping centers, hospitals — starting with as little as $500. They are required by law to distribute 90% of taxable income to shareholders. This is how you begin building real estate exposure before you can afford an actual building. The wealthy use REITs as a parking layer while accumulating capital for direct ownership.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">II</span>
+        <div class="pillar-content">
+          <h4>Private Lending — Become the Bank</h4>
+          <p>When a house flipper or small developer cannot get a fast bank loan, they borrow from private individuals at 8–14% interest, secured by the property deed. With $10,000–$25,000, you can become a private lender on small deals — earning the interest the bank would earn, secured against real collateral. This is how old money has generated income for centuries. Not by doing the work — by financing those who do.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">III</span>
+        <div class="pillar-content">
+          <h4>Small Business Equity Stakes</h4>
+          <p>A $10,000–$25,000 stake in a local business run by someone talented can return 30–100% annually in a good year. A barbershop. A cleaning company. A food truck with a proven concept. You are not buying the business — you are buying a percentage of its profits. Find someone who is good at the work and bad at the business side. Provide capital and structure. Split the upside. This is angel investing at the neighborhood level — and it works.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">IV</span>
+        <div class="pillar-content">
+          <h4>House Hacking — Your First Real Estate Move</h4>
+          <p>Buy a small multi-unit property (duplex, triplex, or quadplex) using an FHA loan with as little as 3.5% down. Live in one unit. Rent the others. In many markets, the rental income from the other units covers the entire mortgage — meaning you live for free while building equity. This is the first real estate move available to someone with $15,000–$30,000 saved. It is not glamorous. It is how more millionaires have gotten started than any other single strategy in American real estate history.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="formula">
+      <div class="formula-item">
+        <div class="fi-top">EARN</div>
+        <div class="fi-bot">Stack to $10K</div>
+      </div>
+      <div class="formula-op">→</div>
+      <div class="formula-item">
+        <div class="fi-top">DEPLOY</div>
+        <div class="fi-bot">Leverage assets</div>
+      </div>
+      <div class="formula-op">→</div>
+      <div class="formula-item">
+        <div class="fi-top">COLLECT</div>
+        <div class="fi-bot">Cash flow</div>
+      </div>
+      <div class="formula-op">→</div>
+      <div class="formula-item">
+        <div class="fi-top">STACK</div>
+        <div class="fi-bot">Reinvest all</div>
+      </div>
+      <div class="formula-op">→</div>
+      <div class="formula-item">
+        <div class="fi-top">SCALE</div>
+        <div class="fi-bot">To $100K</div>
+      </div>
+    </div>
+
+    <div class="don-quote">
+      <p>The moment you have $10,000 that you did not need to spend, you are no longer poor. You are simply a wealthy person who hasn't gotten there yet. The money is the proof. The patience is the path.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <p class="section-number">07</p>
+    <p class="section-eyebrow">Module Seven</p>
+    <h2 class="section-title">The $100K+ Game — <em>Real Estate &amp; Dynasty Mode</em></h2>
+    <div class="lead">At $100,000, you have crossed into a different world. This is where ordinary people stop — convinced they have done something remarkable. The wealthy know this is simply where the real game begins.
+    </div>
+
+    <p>One hundred thousand dollars properly deployed generates passive income. It creates leverage that buys more assets. It qualifies you for deals that don't exist below this threshold. And critically — it is the amount where the tax and legal structures you will learn in the final modules of this playbook <span class="hl">begin to produce enormous, measurable advantages</span> that compound over time.</p>
+
+    <p>Most people who reach $100,000 make one of three mistakes: they keep it in cash waiting for the "perfect" investment. They put it all in one thing. Or they celebrate by finally buying the lifestyle they deferred — and lose the capital that was about to change their life. The Don has watched this tragedy play out more times than he can count. The fourth option — deploying it strategically across real assets — is the one almost nobody takes. Until now.</p>
+
+    <div class="con-grid">
+      <div class="con-cell">
+        <h4>The BRRRR Method</h4>
+        <p>Buy a distressed property. Rehabilitate it. Rent it for cash flow. Refinance to pull out your capital. Repeat with the same capital on the next property. Done correctly, the same $30,000 can be used to acquire five or six properties over several years — each one generating monthly income, each one building equity.</p>
+      </div>
+      <div class="con-cell">
+        <h4>Real Estate Syndications</h4>
+        <p>Pool capital with other investors — typically $25,000–$50,000 minimums — to purchase large commercial properties managed by a professional operator. You own equity in a $5M apartment complex without being the landlord. Returns of 7–15% annually, plus equity appreciation, are common in well-run syndications.</p>
+      </div>
+      <div class="con-cell">
+        <h4>The Short-Term Rental Arbitrage</h4>
+        <p>Lease a property from a landlord, furnish it, and sublease it short-term at a premium — with the landlord's permission. In the right markets, a unit leased for $2,000/month generates $4,000–$6,000 on short-term platforms. No mortgage. No down payment. Capital used: furniture only.</p>
+      </div>
+      <div class="con-cell">
+        <h4>Commercial Real Estate Entry</h4>
+        <p>Small commercial properties — storage units, small office buildings, mixed-use retail — are often less competitive than residential. Tenants sign multi-year leases and handle their own maintenance. Once you own the building, your tenant's business works to pay your mortgage. This is the structure behind every prosperous downtown in America.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The Dynasty Portfolio — What $100K Builds in Ten Years</h3>
+
+    <table class="truth-table">
+      <thead>
+        <tr>
+          <th>Asset</th>
+          <th>Capital Deployed</th>
+          <th>10-Year Projection</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>House-hack duplex (BRRRR)</td>
+          <td>$25,000 down</td>
+          <td class="good">$80K–$120K equity + $800/mo cash flow</td>
+        </tr>
+        <tr>
+          <td>Real estate syndication (2 deals)</td>
+          <td>$50,000</td>
+          <td class="good">$90K–$130K return + quarterly distributions</td>
+        </tr>
+        <tr>
+          <td>Index fund (automated, untouched)</td>
+          <td>$15,000</td>
+          <td style="color:var(--gold)">$38K–$55K at historical average</td>
+        </tr>
+        <tr>
+          <td>Small business equity stake (2–3 deals)</td>
+          <td>$10,000</td>
+          <td style="color:var(--gold)">Variable — one winner makes the whole decade</td>
+        </tr>
+        <tr>
+          <td>Total capital deployed</td>
+          <td>$100,000</td>
+          <td class="good">$600K–$1M+ net worth (conservative)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="secret-box">
+      <h4>The Generational Transfer — The Move Old Money Never Talks About</h4>
+      <p>Once your real estate portfolio reaches $500,000 in equity, the game changes entirely — not just in what you own, but in how it is held, structured, and eventually transferred. The legal and protective architecture that makes this possible — entities, trusts, estate strategy — is covered in full in Modules 9 and 10. The point to understand here is this: the asset itself is only half the equation. How it is titled, held, and passed down determines whether it becomes a dynasty or a one-generation story. Most families get the asset right and the structure wrong. Do not be most families.</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The Full Ladder — From Zero to Dynasty</h3>
+
+    <ul class="pillar-list">
+      <li>
+        <span class="pillar-num">$0</span>
+        <div class="pillar-content">
+          <h4>The Decision Point</h4>
+          <p>Mindset shift. Audit. Sell the dormant. Invoice a skill. First $1,000 in a separate account. Touch nothing.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">$1K</span>
+        <div class="pillar-content">
+          <h4>Foundation Building</h4>
+          <p>Four-account structure. First index fund. Emergency buffer. Side income stream launched. All second income reinvested.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">$10K</span>
+        <div class="pillar-content">
+          <h4>Leverage Unlocked</h4>
+          <p>REITs. Private lending. Small equity stakes. Business income scaling. House hack research begins. Legal structures on the horizon.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">$100K</span>
+        <div class="pillar-content">
+          <h4>Dynasty Mode Activated</h4>
+          <p>First real property acquired. Syndication positions opened. Trust structure implemented. Estate plan drafted. Portfolio begins compounding without you.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">$1M+</span>
+        <div class="pillar-content">
+          <h4>The Architect Stage</h4>
+          <p>You are no longer building wealth. You are managing it. Family office setup. Multi-generational trust (Module 10). Geographic diversification of assets (Module 12). The psychological framework to ensure your heirs preserve what you built (Module 14). You have become what they feared you would.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="don-quote">
+      <p>My grandfather did not dream of being rich. He dreamed of building something his grandchildren's grandchildren would still benefit from. That is the only dream worth having. Everything else is just spending money with extra steps.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+
+  <div class="section">
+    <p class="section-number">08</p>
+    <p class="section-eyebrow">Module Eight</p>
+    <h2 class="section-title">How <em>Wealth Actually Moves</em> — The Shadow Economy</h2>
+    <div class="lead">There are two economies running simultaneously at all times. One is visible. The other is where real wealth is made, kept, and transferred.
+    </div>
+
+    <p>The visible economy is GDP, tax returns, official salaries, publicly traded stocks. It's what politicians debate and what newspapers report. But the wealthy understand that a parallel economy of equal or greater size runs alongside it — through private deals, cash transactions, trusts, offshore accounts, and handshake agreements in rooms where no cameras point.</p>
+
+    <p>This is not illegal — though some of it exists in a gray zone. Most of it is simply <span class="hl">legal knowledge that is never taught</span> because it benefits those who already know it to keep it exclusive.</p>
+
+    <div class="con-grid">
+      <div class="con-cell">
+        <h4>How the wealthy move money</h4>
+        <p>Through legal entities: LLCs, S-Corps, trusts, foundations, and holding companies. Each layer reduces tax exposure and protects assets from litigation.</p>
+      </div>
+      <div class="con-cell">
+        <h4>How the middle class moves money</h4>
+        <p>Directly — from paycheck to bank account. Every dollar visible. Every dollar taxed. No structures, no protection, no leverage.</p>
+      </div>
+      <div class="con-cell">
+        <h4>Offshore ≠ Illegal</h4>
+        <p>Every major corporation — Apple, Google, Amazon — operates across multiple jurisdictions to legally minimize tax. This is available to individuals too. Most people simply never learn how.</p>
+      </div>
+      <div class="con-cell">
+        <h4>The Trust Advantage</h4>
+        <p>Assets held in a properly structured trust move invisibly across generations — bypassing probate, minimizing estate taxes, staying out of public record. The full architecture is built in Module 10. Understand here that the structure is not the luxury — the absence of it is the cost.</p>
+      </div>
+    </div>
+
+    <div class="secret-box">
+      <h4>The Business Expense Reality</h4>
+      <p>A business owner can legally deduct their car, their phone, their home office, their travel, their meals, their education, and dozens of other expenses before paying taxes. An employee pays taxes on their full salary and then buys those same things with after-tax dollars. This single structural difference — paying personal expenses through a business — is worth tens of thousands of dollars per year. It is legal. It is available to everyone. And almost no one does it.</p>
+    </div>
+
+    <p>The lesson is not to cheat the system. The lesson is to learn the system's rules well enough to use them the same way the wealthy do — because those rules exist for everyone. The wealthy simply have better advisors who explain them.</p>
+  </div>
+
+    
+  <div class="section">
+    <p class="section-number">09</p>
+    <p class="section-eyebrow">Module Nine</p>
+    <h2 class="section-title">The Architect's Move — <em>Systematizing Your Empire</em></h2>
+    <div class="lead">Most people build the machine. Very few learn how to make the machine run without them. The Don does not work in his empire. He designs it.
+    </div>
+
+    <p>Once you have capital working, income streams running, and assets accumulating, the work shifts entirely. You are no longer the laborer. You are not even the manager. You become the architect — and architects do not carry bricks. The transition from operator to architect is the most important move in this entire playbook. Most people never make it. They keep working harder inside a system that should be working for them.</p>
+
+    <p>The wealthy are not busier than everyone else. In many cases, they work fewer hours. What they have — that almost no one else builds — is <span class="hl">a system that continues producing whether or not they show up</span>. This module is about building that system.</p>
+
+    <div class="secret-box">
+      <h4>The Test of a Real Empire</h4>
+      <p>Take a two-week vacation. Tell no one you're going. Turn off your phone for 48 hours at some point. Come back and check your accounts. If you lost money — you have a job, not an empire. If your accounts are the same or higher — you have a machine. This test, brutal as it sounds, is the only honest measure of whether you have built something real or simply constructed a more complicated way to trade time for money.</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The Five Systems of an Empire</h3>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>The Automated Cash Flow Architecture</h4>
+          <p>Every dollar must have a destination before it arrives. Set up automatic transfers: operating expenses covered first, investment contributions scheduled on payday, opportunity fund funded monthly. A proper financial architecture means you never make a routine money decision manually again. The wealthy do not decide where money goes each month — their system decides. They review. They adjust quarterly. They do not manage.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>The Tax Optimization Engine</h4>
+          <p>The wealthy do not do taxes in April. They do tax strategy in January. LLC structured. S-Corp election evaluated. Every business expense documented and categorized in real time. Quarterly meetings with a CPA — not to file, but to plan. By the time the filing deadline arrives, the work has been done for months. The difference between a reactive tax filer and a proactive tax strategist is often $20,000–$80,000 per year at the income levels this playbook is building toward.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>The Delegation Stack</h4>
+          <p>Property manager at 8–10% of rents. Bookkeeper for all financial records. A virtual assistant or coordinator for communications and scheduling. This is not a luxury — it is pure arithmetic. If your time is worth $150 per hour and you spend 15 hours per month managing properties yourself, a $300 property management fee is the highest-return investment available to you. Every hour you spend on tasks a qualified person can do for $20–$50 is an hour you did not spend building, acquiring, or thinking. The wealthy pay for their time to remain free.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>The Investment Policy Statement</h4>
+          <p>A single written page that dictates exactly what you invest in, at what capital thresholds, in what order of priority, and under what conditions — if any — you would sell. This document exists for one reason: to defeat your emotions. Every market crash, every hot tip, every moment of fear or greed will attempt to override your strategy. The IPS is the rule that overrules every feeling. When in doubt, you read it. The document wins. Fortunes are lost not by bad strategy but by abandoning good strategy at the worst possible moment.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>The Legacy Architecture</h4>
+          <p>The fifth system is not built in a spreadsheet. It is built with an estate attorney and a clear understanding of what you are protecting and who you are protecting it for. The moment your empire has real value, it needs walls — legal, structural, and generational walls that keep it intact long after you are no longer making decisions. The full architecture of wealth protection — entities, trusts, insurance, and geographic strategy — is the subject of the next module. This step exists here to make one point: systematize the protection the same way you systematized everything else. It is not a task you do once at the end. It is a living system you build in parallel.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="formula">
+      <div class="formula-item">
+        <div class="fi-top">AUTOMATE</div>
+        <div class="fi-bot">Cash flow</div>
+      </div>
+      <div class="formula-op">→</div>
+      <div class="formula-item">
+        <div class="fi-top">DELEGATE</div>
+        <div class="fi-bot">Operations</div>
+      </div>
+      <div class="formula-op">→</div>
+      <div class="formula-item">
+        <div class="fi-top">OPTIMIZE</div>
+        <div class="fi-bot">Tax & returns</div>
+      </div>
+      <div class="formula-op">→</div>
+      <div class="formula-item">
+        <div class="fi-top">DOCUMENT</div>
+        <div class="fi-bot">The IPS</div>
+      </div>
+      <div class="formula-op">→</div>
+      <div class="formula-item" style="border-color:var(--gold);background:rgba(201,168,76,0.06);">
+        <div class="fi-top">PROTECT</div>
+        <div class="fi-bot">→ Module 10</div>
+      </div>
+    </div>
+
+    <div class="don-quote">
+      <p>A business that requires you is not a business. It is a job with extra paperwork. Build the machine, then remove yourself from the machine. That is the only definition of freedom I have ever respected.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+
+  <div class="section">
+    <p class="section-number">10</p>
+    <p class="section-eyebrow">Module Ten</p>
+    <h2 class="section-title">Protecting What You Build — <em>The Don's Defense System</em></h2>
+    <div class="lead">Building wealth is only half the game. Keeping it is where most people — even the newly rich — completely fail.
+    </div>
+
+    <p>The most dangerous moment is not when you are poor. It is when you have built something significant and you still have no protection around it. Lawsuits, divorce, bad partnerships, economic downturns, tax mismanagement — these are the wolves that eat new money alive. Old money survives because it has been behind walls for generations.</p>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The Four Walls of Wealth Protection</h3>
+
+    <ul class="pillar-list">
+      <li>
+        <span class="pillar-num">I</span>
+        <div class="pillar-content">
+          <h4>Legal Entity Structure</h4>
+          <p>Module 8 showed you how the wealthy move money through legal entities. This module is about building your own. The question is not whether to structure — it is which structure fits your situation and when. A single-member LLC is the starting point: simple, inexpensive, and it creates the legal wall between your personal life and your assets. As the portfolio grows, a layered structure — operating LLC, holding LLC, and potentially an S-Corp election for tax efficiency — is how old money keeps each asset protected from every other. One lawsuit should never be able to reach everything you have built. That is the only goal of the entity layer.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">II</span>
+        <div class="pillar-content">
+          <h4>Trusts — the Wealth Time Capsule</h4>
+          <p>A revocable living trust allows you to control your assets during your lifetime and pass them to heirs without probate — the costly, public, time-consuming court process that eats ordinary estates alive. Irrevocable trusts go further: they remove assets from your taxable estate entirely. And here is the specific mechanism old money uses that almost no one else knows: the stepped-up cost basis. When assets held in a properly structured estate pass to your heirs at death, the cost basis resets to the current market value — meaning decades of capital gains can effectively disappear for tax purposes. The Rockefellers used it. The Kennedys used it. It is written directly into the tax code. The application requires one estate attorney and a clear afternoon. Most families leave millions on the table because no one ever told them this conversation needed to happen.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">III</span>
+        <div class="pillar-content">
+          <h4>Insurance — The Boring Tool That Saves Everything</h4>
+          <p>Umbrella insurance. Life insurance structured as an asset (whole life, properly set up). Business liability insurance. Disability insurance. The wealthy are not more insured because they are more afraid — they are more insured because they understand that protecting accumulated wealth is worth far more than protecting income. Insurance is not a cost. It is a moat.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">IV</span>
+        <div class="pillar-content">
+          <h4>Geographic Diversification</h4>
+          <p>Old money never keeps everything in one country, one currency, or one system. Bank accounts in multiple jurisdictions. Real estate in multiple markets. A residency option that functions as a backup plan. This is the defensive application of geography — not paranoia, but the same diversification principle applied to sovereignty itself. When one system fails — and systems do fail — your wealth survives in the others. The offensive application of geography — using it to actively reduce costs, optimize taxes, and expand your lifestyle — is the subject of Module 12.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="don-quote">
+      <p>A man who builds an empire and leaves it unprotected has simply built a gift for whoever comes next. The Don does not give gifts to strangers.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+
+  <div class="section">
+    <p class="section-number">11</p>
+    <p class="section-eyebrow">Module Eleven</p>
+    <h2 class="section-title">The Diplomacy of Money — <em>Networking &amp; Etiquette</em></h2>
+    <div class="lead">Master the "invisible" social codes of the elite. It is not about how much you have — it is about how you carry yourself.
+    </div>
+
+    <p>There is a reason certain rooms are impossible to enter without an introduction. High-value circles are not gatekept by money alone. They are gatekept by behavior. By calibration. By the unspoken language of people who have operated at a certain level long enough that they no longer need to announce it. The moment someone walks into a room trying to prove something — the room knows. And the room closes.</p>
+
+    <p>This module is not about pretending. It is about understanding that <span class="hl">wealth has a grammar</span>, and fluency in that grammar is the difference between being invited back and being quietly never mentioned again. The good news: this grammar can be learned. The elite were not born knowing it. They were taught — by family, by proximity, by watching carefully. You are being taught it now.</p>
+
+    <div class="secret-box">
+      <h4>Reading the Room</h4>
+      <p>Before you speak at any high-value gathering, observe for ten minutes. Who defers to whom? Who listens without interrupting? Who never mentions their own net worth? The quietest person in the room is almost always the most powerful. New money talks about what it owns. Old money talks about ideas, history, and the people it finds interesting. Study who gets listened to — then study why. The answer is almost never the loudest voice.</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The Three Social Codes of Elite Circles</h3>
+
+    <ul class="pillar-list">
+      <li>
+        <span class="pillar-num">I</span>
+        <div class="pillar-content">
+          <h4>The Art of the Strategic Favor</h4>
+          <p>Never ask for a favor you cannot eventually return in kind — or at the very least, in value. And never arrive empty-handed. When you enter a high-value relationship, bring something: an introduction, a piece of information, a solution to a problem they have mentioned. The elite operate on a ledger of reciprocity that is never spoken of and never forgotten. Position yourself as a giver first and the doors open from the inside.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">II</span>
+        <div class="pillar-content">
+          <h4>How to Enter Without Looking Like "New Money"</h4>
+          <p>Never discuss price. Never name-drop your possessions. Never correct someone about money in a social setting. Ask questions that show genuine curiosity rather than fishing for contacts. Show up on time — old money treats punctuality as a form of respect, not a formality. The fastest way to be accepted in elite circles is to seem entirely unbothered by the fact that you are in them. Comfort is the signal. Hunger is the tell.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">III</span>
+        <div class="pillar-content">
+          <h4>Building a Network That Compounds</h4>
+          <p>Your network is a portfolio. Diversify by industry, by generation, and by geography. One mentor worth knowing is worth more than fifty peers at your own level. Invest in relationships before you need them — because a favor asked in crisis carries none of the weight of a relationship cultivated in calm. Send the article that reminded you of them. Attend the event even when you are tired. Remember their children's names. These are not tricks — they are the natural behavior of someone who genuinely values people. Genuine interest cannot be faked for long. Develop it.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="don-quote">
+      <p>The most valuable room you will ever enter is one you were invited into — not one you forced your way through. Earn the invitation first. Everything else follows.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+
+  <div class="section">
+    <p class="section-number">12</p>
+    <p class="section-eyebrow">Module Twelve</p>
+    <h2 class="section-title">Geographic Arbitrage — <em>Living Like a Don</em></h2>
+    <div class="lead">Turn the globe into your personal spreadsheet. The Don does not ask where he must live. He decides where he is treated best.
+    </div>
+
+    <p>Module 10 introduced geographic diversification as a defensive tool — a way to protect what you have built. This module goes further. It is the offensive move: using geography not just to protect wealth, but to <span class="hl">dramatically accelerate it</span>. Geographic arbitrage is the strategy of earning in a strong currency, living in a lower-cost environment, and using the spread to compound wealth at a pace that would be impossible in a single-country, single-currency existence.</p>
+
+    <p>This is not theoretical. It is what the informed have done for decades. It is why certain families flourish across multiple continents while others grind in one city their entire lives and never get ahead. The world is not flat — it is uneven, and that unevenness is your advantage.</p>
+
+    <div class="secret-box">
+      <h4>The $10,000/Month Lifestyle at $3,000/Month Cost</h4>
+      <p>A $3,000/month budget in Medellín, Lisbon, Chiang Mai, or Tbilisi buys what $10,000–$12,000 cannot comfortably buy in New York, London, or Sydney. A private apartment in a desirable neighborhood. Restaurant dinners five nights a week. High-quality healthcare at a fraction of Western costs. A housekeeper. Travel. And money left over to invest. This is not sacrifice — it is strategy. The lifestyle improves while the cost collapses. The delta between the two is compounded into the portfolio every month.</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">Three Levers of Geographic Intelligence</h3>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Currency Strength as a Weapon</h4>
+          <p>If you earn in USD, EUR, GBP, or CHF and spend in Colombian pesos, Georgian lari, Thai baht, or Vietnamese dong — you are the most powerful person in the room economically. A dollar earned in the United States and spent in Southeast Asia carries three to five times the purchasing power. Over a decade of compounding, this single strategy alone can produce the wealth equivalent of doubling your income without earning another cent more.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Optimizing Taxes by Changing Zip Codes</h4>
+          <p>Tax residency is not fixed. It is a choice — for those who choose to see it that way. Countries like Portugal (the NHR regime), Panama (territorial taxation), the UAE (zero income tax), Paraguay, and Georgia offer legal tax structures that can reduce or eliminate tax liability for income earned outside the country. The wealthy have known and used these structures for generations. It is not evasion — it is legal residency optimization. The difference between a 40% tax rate and a 0–10% rate, applied over a lifetime of compounding, produces a number that is difficult to comprehend.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>The Sovereign Residency Portfolio</h4>
+          <p>A second passport or residency permit is not a luxury document — it is a geopolitical hedge. A second citizenship means a second option: if your home country becomes economically hostile, politically unstable, or simply too expensive, you have a legal right to be somewhere else. Programs in Portugal, Paraguay, Malta, Panama, and a dozen other jurisdictions offer residency or citizenship pathways through investment, ancestry, or extended stays. The cost is real. So is the value of optionality when you need it most.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="don-quote">
+      <p>A man tied to one city, one currency, one government is a man with one option. The Don keeps his options open — not out of disloyalty, but out of wisdom.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+
+  <div class="section">
+    <p class="section-number">13</p>
+    <p class="section-eyebrow">Module Thirteen</p>
+    <h2 class="section-title">Elite Crypto-Assets — <em>The Digital Gold</em></h2>
+    <div class="lead">This is not about "get-rich-quick" coins. This is the ultimate exit from the central bank trap — the one Module 2 warned you about.
+    </div>
+
+    <p>In Module 2, you learned how fiat currency is systematically devalued — how inflation is not an accident but a feature of a system designed to transfer wealth from those who hold cash to those who hold assets. The natural conclusion of that lesson is this: if the system inflates your savings away, the rational response is to hold something it cannot inflate. For centuries, that answer was gold — and gold remains in the Don's asset hierarchy for exactly that reason. In the 21st century, a second answer has emerged alongside it — one that is harder, more portable, more verifiable, and immune to the particular vulnerabilities of physical storage.</p>
+
+    <p>Bitcoin is not a technology speculation. At the level this playbook operates, it is a <span class="hl">monetary insurance policy</span> — a sovereign hard asset that no central bank can print, no government can confiscate through the banking system, and no single jurisdiction controls. This distinction matters enormously. Most people who dismiss Bitcoin have never seriously studied money. Those who have studied money tend to hold both gold and Bitcoin — one for centuries of proven track record, one for the properties that make it uniquely suited to the digital age.</p>
+
+    <div class="secret-box">
+      <h4>The Central Bank Trap — Revisited</h4>
+      <p>Every dollar in a bank account is an unsecured loan to that bank. It is a liability on their balance sheet — not yours. In a banking crisis, that distinction becomes catastrophic for depositors. Bitcoin held in cold storage is not anyone's liability. It is not in the banking system. It cannot be frozen, rehypothecated, or diluted by a government printing decision made at 2 AM in a Federal Reserve emergency meeting. This is not paranoia — it is the same logic that led old money to hold gold offshore for a century. The asset has changed. The principle has not.</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">Three Principles of Sovereign Crypto Strategy</h3>
+
+    <ul class="pillar-list">
+      <li>
+        <span class="pillar-num">I</span>
+        <div class="pillar-content">
+          <h4>Bitcoin as a Sovereign Hard Asset</h4>
+          <p>The Don does not trade Bitcoin. He accumulates it — methodically, consistently, on a schedule that removes emotion from the equation. Dollar-cost averaging into a hard-capped asset over a decade is not gambling. It is the same discipline that makes real estate compounding powerful: time in the asset, not timing the market. Treat it as a 5–15% allocation of your total portfolio — a monetary hedge that sits alongside your hard assets, not a replacement for any of them. This is how institutions are beginning to hold it. The early movers have always won.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">II</span>
+        <div class="pillar-content">
+          <h4>Cold Storage for Dynastic Wealth</h4>
+          <p>Not your keys, not your coins. Bitcoin held on an exchange is Bitcoin held by a third party — subject to platform risk, regulatory seizure, and the failures of institutions you do not control. Cold storage — hardware wallets, properly backed up, with seed phrases held in multiple secure locations — removes your sovereign asset from every system that could fail around it. Dynastic wealth is held by the family. It does not live on someone else's server.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">III</span>
+        <div class="pillar-content">
+          <h4>Protecting Capital from Government Confiscation</h4>
+          <p>History is not kind to the assumption that governments respect private wealth in crisis. Gold was confiscated in the United States in 1933. Bank accounts were frozen in Cyprus in 2013. Currencies have been devalued overnight in Argentina, Turkey, Venezuela, and Lebanon within living memory. Bitcoin, properly held in cold storage across jurisdictions, represents the first monetary asset in history that is genuinely difficult to confiscate at scale. That property alone makes it worth understanding, regardless of price movements.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="don-quote">
+      <p>Every generation discovers, usually too late, that the rules of money can change overnight. The wise man holds something the rule-makers cannot touch.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+
+  <div class="section">
+    <p class="section-number">14</p>
+    <p class="section-eyebrow">Module Fourteen</p>
+    <h2 class="section-title">Generational Intelligence — <em>Psychology of the Heir</em></h2>
+    <div class="lead">Wealth is easy to build. It is far easier to destroy. This module exists to ensure your legacy outlives you — and survives your children.
+    </div>
+
+    <p>Module 9 covered the Legacy Architecture as a system — the final operational layer of an empire that runs without you. But a system requires people to honor it, and people require values before they can honor anything. History is a graveyard of wealthy families whose legal structures were intact and whose children were not. The third generation destroys what the first generation built not because the lawyers failed — but because no one transmitted the <em>psychology</em> alongside the money.</p>
+
+    <p>Generational intelligence is the rarest form of wealth management. It is not taught in business schools. It is passed down — or it is lost. The Don does not simply transfer capital. He transfers <span class="hl">the values, the instincts, and the hunger</span> that made the capital possible in the first place. That transmission is the work of a lifetime, and it begins long before the will is written.</p>
+
+    <div class="secret-box">
+      <h4>The Shirt-Sleeves to Shirt-Sleeves Problem</h4>
+      <p>There is a proverb that exists in almost every culture on earth: from rice paddy to rice paddy in three generations (China). From clogs to clogs in three generations (Lancashire). From shirtsleeves to shirtsleeves in three generations (United States). The pattern is so universal it has a name in every language because it happens everywhere, to almost everyone. The first generation builds through sacrifice. The second generation enjoys and maintains. The third generation, raised in comfort with no knowledge of the struggle, spends the principal. The only defense is deliberate transmission — not of money, but of the mindset that creates it.</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The Three Laws of Dynastic Psychology</h3>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Raising Hungry Heirs Instead of Spoiled Ones</h4>
+          <p>Comfort kills ambition. Children who never experience the weight of a consequence, the sting of a failed effort, or the satisfaction of earning something with their own hands are not being protected — they are being disabled. The Don gives his children experiences, not outcomes. He lets them fail at small things so they do not fail at large ones. He gives them responsibility before he gives them resources. The goal is not an heir who inherits money. The goal is an heir who would not need to.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Transferring Values Before Transferring Cash</h4>
+          <p>A family that cannot articulate why it is wealthy — what principles created the wealth, what sacrifices were made, what decisions were avoided — is a family whose wealth is already leaving. Create a family narrative. Write it down. Tell the stories of how the first dollar was earned, what it cost, and what it meant. A child who understands the origin of the family's wealth treats it differently than one who simply inherits a number. Wealth without context is an accident waiting to end.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>The Mental Framework of a 100-Year Plan</h4>
+          <p>Quarterly thinking builds quarterly results. Generational thinking builds dynasties. The Don does not ask what this investment will return in three years. He asks what this decision will mean for his grandchildren's grandchildren. This shift in time horizon changes everything: what you plant, what you protect, what you refuse, and what risks you absorb vs. which ones you pass over. A hundred-year plan is not a spreadsheet — it is a philosophy. It is the decision to stop thinking like an individual and start thinking like a house.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="don-quote">
+      <p>The measure of a man is not what he builds. It is whether what he builds still stands a hundred years after he is gone.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+
+  <div class="section">
+    <p class="section-number">15</p>
+    <p class="section-eyebrow">Module Fifteen</p>
+    <h2 class="section-title">The Art of the Exit — <em>Selling, Timing &amp; Liquidity</em></h2>
+    <div class="lead">Every great builder eventually faces the move no one prepares them for. Not how to acquire. Not how to hold. How to let go — at the right moment, in the right structure, for the right price.
+    </div>
+
+    <p>The first fourteen modules of this playbook taught you how to build. How to stack, compound, protect, and systematize. But there is a move that sits at the far end of every great wealth journey that almost no one discusses — because the people who have done it well have no incentive to explain it, and the people who did it badly are too embarrassed to describe what went wrong.</p>
+
+    <p>The exit is the harvest. And like any harvest, <span class="hl">timing and method determine whether decades of work translate into generational wealth or a taxable event that halves everything you built</span>. The Don does not stumble into his exit. He plans it years in advance, structures it deliberately, and executes it on his terms — never on the market's, never on a buyer's, and never under duress.</p>
+
+    <div class="secret-box">
+      <h4>Why Most Exits Destroy Value</h4>
+      <p>The average business owner who sells receives between 40–60 cents of every dollar of headline price after taxes, deal costs, earn-outs that never materialize, and representations and warranties that come back to haunt them. The average real estate investor who sells at the wrong moment, in the wrong structure, pays capital gains that erase years of appreciation. The exit is not the finish line — it is one of the most technically demanding moves in the entire game. Treat it accordingly.</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The Four Exit Disciplines</h3>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Build to Sell from Day One</h4>
+          <p>The businesses and properties that sell for the highest multiples are not the ones that were most profitable — they are the ones that were most systematized. A buyer does not pay for your hustle. They pay for a machine that runs without you. Every system you build in Module 9, every delegation stack, every documented process — these are not just operational tools. They are valuation multipliers. A business that requires its owner is worth 2–3x earnings. A business that runs without its owner is worth 5–10x. The Don builds with the exit in mind from the first brick.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>The Tax Architecture of the Exit</h4>
+          <p>How you hold an asset at the moment of sale determines how much of the sale you keep. An asset held personally is taxed differently than one held in an LLC, which is taxed differently than one held in a trust, which is different again from one structured as an installment sale, a 1031 exchange, or a charitable remainder trust. The Opportunity Zone program, the QSBS exclusion, the structured earnout — these are not exotic maneuvers. They are the standard toolkit of anyone who has sold a business or large real estate position in the last twenty years. You do not learn about them the day you sign the purchase agreement. You structure for them three to five years before.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Timing the Exit — Sell Before the Peak</h4>
+          <p>The greatest exits in history were not made at the top. They were made slightly before it — when demand was still strong, when the market had not yet turned, when the seller could afford to walk away from the last 10% of upside in exchange for certainty. The Don does not sell in panic and does not hold in greed. He identifies his number, structures his exit, finds his buyer in a position of strength, and closes before the market tells him to. The amateur sells when he has to. The Don sells when he chooses to.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>What to Do with the Proceeds</h4>
+          <p>The moment of liquidity is the moment of maximum danger. A large cash position is not wealth — it is potential wealth that can be destroyed by a single bad decision made in a state of post-exit euphoria. The wealthy have a deployment plan written before the sale closes: what percentage goes into the trust, what goes into the next acquisition, what percentage is held in short-duration instruments while the next opportunity is identified, and what — if any — is allocated to lifestyle. The plan is written when emotions are calm. It is executed when they are not.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="don-quote">
+      <p>A man who builds a great thing and then sells it badly has not sold a business. He has donated one. Know the price. Know the structure. Know the plan for what comes after. Then — and only then — sign.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+
+  <div class="section">
+    <p class="section-number">16</p>
+    <p class="section-eyebrow">Module Sixteen</p>
+    <h2 class="section-title">Health Capital — <em>The Body as the Primary Asset</em></h2>
+    <div class="lead">The modules before this one built the empire. This module addresses the one asset that, if it fails, renders every other asset irrelevant — and the only one that cannot be rebuilt with money alone.
+    </div>
+
+    <p>There is a man in every city who spent thirty years building a fortune and spent zero years building the body that was supposed to enjoy it. He arrives at sixty with the net worth he dreamed of at thirty — and a heart, a mind, or a nervous system that cannot cash the check. This is not a metaphor. It is the most common tragedy in high-performance wealth building, and it is almost never discussed in financial education because it does not fit neatly into a spreadsheet.</p>
+
+    <p>The Don treats his body as his most important portfolio position. Not because he is vain. Because he has a <span class="hl">hundred-year plan — and a hundred-year plan requires a hundred-year instrument</span>. Longevity is not luck. It is, to a significant degree, the result of the same disciplined, systematized, long-horizon thinking that built the fortune in the first place.</p>
+
+    <div class="secret-box">
+      <h4>What the Wealthy Actually Spend on Health</h4>
+      <p>Old money families have always understood that medical care is worth spending on before you need it, not after. Annual executive health screenings. Preventive bloodwork panels that most insurance plans do not cover. Sleep optimization as seriously as portfolio optimization. The emerging world of longevity medicine — which focuses on extending healthspan, not just lifespan — is now accessible to anyone willing to treat it as an investment category. The wealthiest families in the world spend more on preventive health per year than most people earn. They are not doing this out of fear. They are doing it because they have assets that require a functioning operator for decades to come.</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">The Four Pillars of Health Capital</h3>
+
+    <ul class="pillar-list">
+      <li>
+        <span class="pillar-num">I</span>
+        <div class="pillar-content">
+          <h4>Cognitive Performance — Protecting the Engine</h4>
+          <p>Every financial decision, every negotiation, every strategic insight in this playbook flows through one organ — the brain. Sleep deprivation, chronic stress, poor metabolic health, and sedentary behavior are not personal failures. They are operational liabilities that reduce the quality of every decision you make. The Don protects his cognitive performance the way he protects his portfolio: proactively, systematically, and with the understanding that small degradations compound over time into catastrophic losses. Seven to nine hours of sleep is not laziness. It is return on cognitive capital.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">II</span>
+        <div class="pillar-content">
+          <h4>Stress as a Balance Sheet Item</h4>
+          <p>Chronic stress is not a feeling — it is a physiological state that elevates cortisol, degrades decision-making, compresses time horizons, and accelerates biological aging. The entrepreneur who is always in crisis mode is not building an empire — he is burning one down slowly from the inside. The systems in Module 9 — automation, delegation, the IPS — are not just financial tools. They are stress reduction instruments. A calm operator makes better decisions than a stressed one. This is not philosophy. It is neuroscience. Treat your stress load the way you treat your debt load: measure it, manage it, and reduce it deliberately.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">III</span>
+        <div class="pillar-content">
+          <h4>Physical Capacity — Longevity as ROI</h4>
+          <p>Strength training, cardiovascular fitness, and metabolic health are not lifestyle choices at the level this playbook operates. They are investments with measurable returns: reduced all-cause mortality, preserved cognitive function, extended years of productive output, and — critically — reduced healthcare costs in the second half of life that can destroy estate plans that were built over decades. The data on resistance training alone as a predictor of longevity is among the most robust in all of medicine. The Don lifts. Not because he wants to look a certain way — because he wants to be functional, sharp, and in control at seventy, eighty, and beyond.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">IV</span>
+        <div class="pillar-content">
+          <h4>The Annual Health Audit</h4>
+          <p>Just as the wealthy review their portfolio quarterly, the Don reviews his health annually — comprehensively, with the same seriousness applied to the balance sheet. Full bloodwork beyond what a standard physical covers. Cardiovascular imaging if family history warrants it. Hormonal panels. Sleep studies if indicated. The goal is not to find problems — it is to catch them at a stage where intervention is still cheap and effective. The medical system is reactive by design. The Don is proactive by disposition. He does not wait to be sick to care about his health. He tends it the way he tends his assets — before there is a crisis, not during one.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="don-quote">
+      <p>I have watched men build fortunes they never lived to enjoy. I have watched others live long enough to spend everything they built on trying to buy back the health they neglected. Neither is a strategy. Take care of the machine. The machine is the whole game.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+
+  <div class="section">
+    <p class="section-number">17</p>
+    <p class="section-eyebrow">Module Seventeen</p>
+    <h2 class="section-title">The Psychology of Enough — <em>Winning the Inner Game</em></h2>
+    <div class="lead">This playbook built your ambition. This module asks the question that ambition alone can never answer: When is it enough? The men who cannot answer that question lose everything — not to the market, but to themselves.
+    </div>
+
+    <p>There is a paradox at the center of every serious wealth-building journey. The same psychological traits that drive someone to build — the hunger, the relentlessness, the refusal to accept the ordinary — are the exact same traits that, left unexamined, will eventually destroy what was built. The man who cannot stop acquiring is not a successful man who got carried away. He is a man who never resolved the question that money was always trying to answer for him.</p>
+
+    <p>The wealthy who lose it do not usually lose it to a bad investment. They lose it to <span class="hl">the inability to distinguish between the hunger that built the empire and the compulsion that no empire will ever satisfy</span>. This is the inner game — and it is harder than any deal in this playbook. No legal structure solves it. No asset allocation answers it. Only self-knowledge does.</p>
+
+    <div class="secret-box">
+      <h4>The Number That Moves</h4>
+      <p>Ask most wealth builders what their number is — the amount at which they would feel financially free — and watch what happens over time. At $100,000, the number is $1 million. At $1 million, it becomes $10 million. At $10 million, somehow $50 million seems like the real threshold. The number is not a financial figure. It is a psychological moving target designed by the unexamined mind to ensure it is never reached. The Don names his number. He writes it down. He builds toward it with intention — and when he crosses it, he stops and asks the harder question: now what am I building for?</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">Three Battles of the Inner Game</h3>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Separating Identity from Net Worth</h4>
+          <p>The most dangerous moment in any wealth journey is when a man's sense of self becomes inseparable from his balance sheet. When the portfolio drops, he feels worthless. When the business struggles, he loses his personality. When a deal falls through, he loses his confidence. This is not wealth — it is a hostage situation. The Don knows who he is independent of what he owns. His values, his relationships, his code — these existed before the money and they will exist after it. A man who is his net worth is a man whose entire identity can be destroyed by a market correction. That is not a foundation. That is a liability.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Risk Calibration After Enough</h4>
+          <p>There is a specific kind of financial ruin that only happens to people who were once very successful: the man who, having reached genuine security, keeps taking the same risks he took when he had nothing to lose — because the risk-taking is what made him feel alive. The tools change. The stakes grow. But the psychological need being served is identical to what it was at the beginning. Wealth changes the consequences of risk without automatically changing the appetite for it. The Don recalibrates. Once the foundation is built, the goal is not to maximize returns. It is to protect the irreplaceable while growing the replaceable. Recklessness at the top is not boldness. It is the same compulsion wearing a more expensive suit.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Defining the Life the Money Is For</h4>
+          <p>Money is not the destination. It is the vehicle. The man who builds a vehicle and then never decides where to drive it has not succeeded — he has simply built a very expensive machine that sits in the garage generating anxiety. What does freedom actually look like for you? What does a day feel like when no alarm forces it into motion? What relationships, what projects, what experiences constitute the life that all of this was pointing toward? These are not soft questions. They are the most important strategic questions in the entire playbook — because without clear answers, no number will ever feel like enough, and the machine will keep running long after the point it was supposed to serve you.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="don-quote">
+      <p>I have seen men with everything spend their lives chasing more. I have seen men with enough spend their lives living. The difference was never in the account balance. It was in the answer to a single question they either asked themselves or never did.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+
+  <div class="section">
+    <p class="section-number">18</p>
+    <p class="section-eyebrow">Module Eighteen</p>
+    <h2 class="section-title">The Long Game — <em>Building a Name That Outlasts the Money</em></h2>
+    <div class="lead">Money lasts generations. A name lasts centuries. The final move of every great dynasty is not a financial transaction. It is the deliberate construction of a legacy that makes the family itself into an institution.
+    </div>
+
+    <p>Module 14 addressed what happens to your wealth after you are gone. This module addresses something deeper and more durable: what happens to your <em>name</em>. The Rockefellers are not remembered primarily for their money — though the money is extraordinary. They are remembered because they understood that a name strategically invested in philanthropy, public life, and institutional influence becomes a force multiplier that protects, opens, and perpetuates the family's position across centuries rather than decades.</p>
+
+    <p>This is not vanity. This is the final layer of the entire architecture — the capstone that sits above the legal structures, above the trusts, above the geographic diversification, above every technical system in this playbook. <span class="hl">A family with a respected name in a community, an industry, or a society is a family that is difficult to attack, easy to partner with, and almost impossible to ignore.</span> That is not a soft advantage. It is the oldest and most durable form of protection ever devised — and it is the last move the Don makes before handing the pen to the next generation.</p>
+
+    <div class="secret-box">
+      <h4>Why Old Money Gives Publicly</h4>
+      <p>Strategic philanthropy — genuine, well-directed giving — is not altruism dressed up as strategy. For the most sophisticated old-money families, it is both simultaneously. A foundation or a named charitable endowment accomplishes four things at once: it positions the family as a contributor to something larger than profit, which makes them politically and socially harder to attack; it creates tax advantages that compound across generations; it builds relationships with institutions — universities, hospitals, civic bodies — that reciprocate with access and influence for decades; and it gives heirs a vehicle for purpose that is separate from, and more meaningful than, merely managing inherited wealth. The Carnegies, the Mellons, the Fords — they did not give because they were noble. They gave because they understood the return on institutional reputation.</p>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);margin:2rem 0 1rem;font-weight:700;">Four Moves That Build a Name That Lasts</h3>
+
+    <ul class="pillar-list">
+      <li>
+        <span class="pillar-num">I</span>
+        <div class="pillar-content">
+          <h4>The Family Brand — Intentional Narrative</h4>
+          <p>Every lasting dynasty has a story. The Medicis were patrons of art and culture. The Rothschilds were architects of European finance. The Kennedys were servants of public life. These narratives did not emerge accidentally — they were cultivated deliberately, through consistent behavior, strategic association, and the conscious management of how the family was perceived by those who mattered. Your family has a story too. The question is whether you are telling it or whether others are telling it for you. The Don decides his narrative, lives it consistently, and ensures that each generation inherits not just the assets but the story that frames them.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">II</span>
+        <div class="pillar-content">
+          <h4>Strategic Philanthropy — Influence Through Giving</h4>
+          <p>A family foundation is not a charity bucket — it is a governance structure that focuses family giving, provides tax efficiency, involves heirs in meaningful decision-making, and builds relationships with the institutions your giving supports. Start it earlier than you think you need to. Fund it with appreciated assets rather than cash, which maximizes tax efficiency. Focus it on one or two areas where the family has genuine knowledge or connection — because concentrated, knowledgeable philanthropy produces far greater impact and far greater recognition than scattered, unfocused giving. Be known for something specific. Depth of impact creates lasting reputation. Breadth of giving creates none.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">III</span>
+        <div class="pillar-content">
+          <h4>Institutional Relationships — The Board Seat as Asset</h4>
+          <p>A seat on the board of a university, a hospital, a cultural institution, or a civic organization is not an honor. It is a strategic position. It provides visibility among other successful families. It creates relationships with institutional leadership that translate into access — for your children's education, for your business's partnerships, for your family's standing in the community. The wealthy have always understood that institutional affiliation is a form of social infrastructure. Build it the same way you build financial infrastructure: deliberately, consistently, and with a long time horizon in mind.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pillar-num">IV</span>
+        <div class="pillar-content">
+          <h4>The Family Constitution — Governing the Name</h4>
+          <p>The most sophisticated family dynasties operate with a written family constitution: a document that defines the family's values, its rules for wealth governance, its expectations of members who carry the name, and its processes for resolving disputes before they become public and destructive. This is not bureaucracy — it is the operating system of a multi-generational institution. Without it, wealth and reputation are managed by whoever argues loudest in a room after a patriarch dies. With it, the family governs itself the way a well-run institution governs itself: by principle, not by personality. The name survives personalities. It must therefore be governed by something more durable than any individual within it.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="don-quote">
+      <p>My grandfather used to say that a man's money is his today, but his name belongs to his grandchildren. Build both accordingly. One fills the vault. The other opens every door that vaults alone cannot.</p>
+      <p class="attribution">— El Capitán</p>
+    </div>
+  </div>
+
+
+  <div class="section" style="border-bottom:none;">
+    <p class="section-eyebrow" style="font-size:13px;letter-spacing:0.4em;">The Grand Finale</p>
+    <h2 class="section-title">What My Grandfather Taught Me as a Boy — <em>Lessons from Three Generations</em></h2>
+    <div class="lead">Every module before this one was about the mechanics. This one is about the soul. The personal code that holds everything together — passed down raw, unfiltered, across three generations of men who built without apology.
+    </div>
+
+    <p>There is a version of this playbook that ends with a formula. An asset allocation table. An eighteen-step checklist and a call to action. You have those things. They work. But they are tools, and tools without a hand behind them are useless. My grandfather never read a finance book. He could not have told you what an S-Corp election was. What he had — what he gave me — was something older and more reliable than any tax code or investment framework.</p>
+
+    <p>He called it <em>el código personal.</em> The personal code. Never trademarked. Never packaged into a course. For most of his life, never written down at all — because he believed that a code worth following was a code worth memorizing. Just five laws, spoken clearly, usually over a table with strong coffee and something stronger. I have carried them for forty years. They have never failed me. Here they are — put to paper for the first time, exactly as he gave them to me.</p>
+
+    <div class="don-quote" style="margin:3rem 0;">
+      <p>You want to know how to build something that lasts? First, listen. Most men never get this far because they talk when they should be listening. The ones who listen — those are the ones I worry about.</p>
+      <p class="attribution">— My Grandfather</p>
+    </div>
+
+    <div class="step-list" style="margin-top:2.5rem;">
+      <div class="step-item">
+        <div class="step-num" style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;padding-top:6px;">I</div>
+        <div class="step-body">
+          <h4>The Law of Silence</h4>
+          <p style="font-style:italic;color:var(--cream);font-size:17px;margin-bottom:0.75rem;">Discretion is your greatest armor.</p>
+          <p>My grandfather never told anyone what he owned, what he earned, or what he planned to do next. Not neighbors. Not friends. Not family who did not need to know. He said: the man who broadcasts his wealth invites three things — envy, request, and the taxman. None of them are guests you want at your table. Silence is not arrogance. It is protection. The most powerful people in any room are the ones whose full picture you never quite see.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num" style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;padding-top:6px;">II</div>
+        <div class="step-body">
+          <h4>The Law of the Handshake</h4>
+          <p style="font-style:italic;color:var(--cream);font-size:17px;margin-bottom:0.75rem;">A man's reputation is the only currency that doesn't inflate.</p>
+          <p>He shook hands once and meant it forever. He said a man who breaks his word over money has made the worst trade available to him — because money can be rebuilt, and reputation cannot. Every deal he ever made, he made on the premise that he would be standing across from that person again someday, in some form, in some context. He always was. Your reputation is compounding right now, whether you are tending it or not. Choose what it compounds into.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num" style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;padding-top:6px;">III</div>
+        <div class="step-body">
+          <h4>The Law of the Suitcase</h4>
+          <p style="font-style:italic;color:var(--cream);font-size:17px;margin-bottom:0.75rem;">Never own more than you can carry if you have to leave in five minutes.</p>
+          <p>This was not a man who traveled light for minimalism. He had seen enough of history — had lived through enough — to know that circumstances change faster than most people are prepared for. He did not mean this literally, though he applied it literally when necessary. He meant it as a philosophy of non-attachment. The man who is bound to his possessions is enslaved by them. The Don holds everything loosely — assets, locations, titles — because the ability to move is the ultimate form of freedom. Module 12 gave you the tools. This law gives you the mindset.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num" style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;padding-top:6px;">IV</div>
+        <div class="step-body">
+          <h4>The Law of the Table</h4>
+          <p style="font-style:italic;color:var(--cream);font-size:17px;margin-bottom:0.75rem;">You never eat alone if there is a smart man nearby with an empty plate.</p>
+          <p>He fed people. Not as charity — as strategy and as character, simultaneously. He believed that the best investment a man could make was in a sharp mind that owed him a meal. Not because he was transactional — he was not. But because he understood that the exchange of bread and ideas was how relationships were born, how intelligence was gathered, and how alliances were formed that no contract could replicate. Module 11 gave you the etiquette. This law gives you the spirit behind it. Invite the smartest person in the room to your table. Then actually listen to them.</p>
+        </div>
+      </div>
+      <div class="step-item" style="border-bottom:none;">
+        <div class="step-num" style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;padding-top:6px;">V</div>
+        <div class="step-body">
+          <h4>The Law of Respect</h4>
+          <p style="font-style:italic;color:var(--cream);font-size:17px;margin-bottom:0.75rem;">Treat money like a guest; if you disrespect it, it will leave before morning.</p>
+          <p>He watched men win fortunes and destroy them inside five years. Not through bad investments — through disrespect. Through arrogance, through waste, through treating abundance as a permanent condition rather than a temporary gift that required daily stewardship. He said: money has memory. It remembers how it was treated in the lean years. Honor it then and it stays. Disrespect it in the fat years and it finds someone who will treat it better. This is not superstition. It is the observed pattern of every man he ever watched rise and fall. The ones who kept it — kept their discipline. The ones who lost it — lost their discipline first.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="don-quote" style="margin-top:3.5rem;border-left-color:var(--gold-light);">
+      <p>He put down his coffee. He looked at me. He said: "That is all I have. The rest you will figure out — or you will not. But if you remember these five things, you will never be poor for long, and you will never be the kind of rich that embarrasses the family." I have remembered them every day since.</p>
+      <p class="attribution">— El Capitán, on his Grandfather</p>
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="cta-section">
+  <div class="content" style="position:relative;">
+    <div class="cover-rule" style="margin-bottom:3rem;"></div>
+    <h2 class="cta-title">The Game Was Always<br>Rigged — Until Now.</h2>
+    <p class="cta-sub">You have read what they spend lifetimes hiding. The only question is: what will you do with it?</p>
+    <hr class="gold-rule" style="opacity:0.3;">
+    <p style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;color:var(--smoke);text-transform:uppercase;margin-bottom:0.5rem;">The wisdom of three generations</p>
+    <div class="signature">El Capitán</div>
+    <p class="sig-title">Old Money · Cuban Blood · No Apologies</p>
+    <div class="cover-rule" style="margin-top:3rem;"></div>
+    <p style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--smoke);text-transform:uppercase;margin-top:2rem;">This playbook is for educational purposes. Consult qualified legal and financial advisors before making decisions.</p>
+  </div>
+</div>
+
+
+
+<style>
+  /* ── PDF Viewer Navigator — clones Chrome/Acrobat visual ── */
+  * { box-sizing: border-box; }
+
+  /* Pill: bottom-left floating chip, exactly like Chrome PDF viewer page counter */
+  #pdf-nav {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  #pdf-pill {
+    pointer-events: all;
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    background: #404040;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
+    overflow: hidden;
+    cursor: default;
+    height: 36px;
+  }
+
+  /* Thumbnail toggle button — left side of pill */
+  #pdf-pill-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    cursor: pointer;
+    border-radius: 20px 0 0 20px;
+    transition: background 0.15s;
+    border: none;
+    background: transparent;
+    padding: 0;
+  }
+
+  #pdf-pill-btn:hover { background: rgba(255,255,255,0.1); }
+  #pdf-pill-btn:active { background: rgba(255,255,255,0.18); }
+
+  /* Grid icon — exactly like Chrome PDF thumbnails icon */
+  #pdf-pill-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: #e8e8e8;
+    opacity: 0.9;
+  }
+
+  /* Divider */
+  #pdf-pill-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+
+  /* Page counter text */
+  #pdf-pill-counter {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0 14px 0 10px;
+    height: 36px;
+    font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1;
+    color: #e8e8e8;
+    white-space: nowrap;
+    letter-spacing: 0;
+  }
+
+  #pdf-cur {
+    font-weight: 500;
+    color: #ffffff;
+  }
+
+  #pdf-pill-sep {
+    color: rgba(255,255,255,0.4);
+    margin: 0 4px;
+    font-weight: 300;
+  }
+
+  #pdf-tot {
+    color: rgba(255,255,255,0.65);
+    font-weight: 400;
+  }
+
+  /* ── Sidebar — clones Chrome PDF sidebar panel ── */
+  #pdf-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 244px;
+    background: #3a3a3a;
+    z-index: 9998;
+    transform: translateX(-100%);
+    transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.5);
+  }
+
+  #pdf-sidebar.open { transform: translateX(0); }
+
+  /* Sidebar toolbar — matches Chrome PDF sidebar header */
+  #pdf-sidebar-toolbar {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 8px 0 4px;
+    background: #3a3a3a;
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    flex-shrink: 0;
+    gap: 2px;
+  }
+
+  #pdf-sidebar-close-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    transition: background 0.12s;
+    flex-shrink: 0;
+    padding: 0;
+  }
+
+  #pdf-sidebar-close-btn:hover { background: rgba(255,255,255,0.1); }
+
+  #pdf-sidebar-close-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: #d0d0d0;
+  }
+
+  #pdf-sidebar-label {
+    font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #e0e0e0;
+    padding-left: 4px;
+    letter-spacing: 0.01em;
+  }
+
+  /* Thumbnails scroll area */
+  #pdf-sidebar-pages {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px 0 16px;
+    background: #3a3a3a;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.18) transparent;
+  }
+
+  #pdf-sidebar-pages::-webkit-scrollbar { width: 6px; }
+  #pdf-sidebar-pages::-webkit-scrollbar-track { background: transparent; }
+  #pdf-sidebar-pages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+  #pdf-sidebar-pages::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.32); }
+
+  /* Each thumbnail item */
+  .pdf-thumb {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 8px 6px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.1s;
+  }
+
+  .pdf-thumb:hover { background: rgba(255,255,255,0.06); }
+  .pdf-thumb.active { background: rgba(255,255,255,0.1); }
+
+  /* The page thumbnail shell */
+  .pdf-thumb-page {
+    width: 108px;
+    height: 153px;
+    background: #1a140c;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .pdf-thumb.active .pdf-thumb-page {
+    box-shadow: 0 0 0 2px #8ab4f8, 0 2px 6px rgba(0,0,0,0.4);
+  }
+
+  /* Page number label below thumbnail */
+  .pdf-thumb-num {
+    font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 5px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+
+  .pdf-thumb.active .pdf-thumb-num { color: #8ab4f8; }
+
+  .pdf-thumb-title {
+    font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    margin-top: 4px;
+    max-width: 108px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .pdf-thumb-eyebrow {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(201,168,76,0.55);
+    line-height: 1;
+  }
+
+  .pdf-thumb.active .pdf-thumb-eyebrow { color: rgba(138,180,248,0.8); }
+
+  .pdf-thumb-tlabel {
+    font-size: 10px;
+    color: rgba(255,255,255,0.38);
+    line-height: 1.3;
+    word-break: break-word;
+  }
+
+  .pdf-thumb.active .pdf-thumb-tlabel { color: rgba(138,180,248,0.75); }
+
+  /* ── Overlay ── */
+  #pdf-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9997;
+  }
+  #pdf-overlay.open { display: block; }
+
+  @media (max-width: 600px) {
+    #pdf-nav { bottom: 16px; }
+    #pdf-sidebar { width: 200px; }
+    .pdf-thumb-page { width: 88px; }
+  }
+</style>
+
+
+<div id="pdf-nav">
+  <div id="pdf-pill">
+    <button id="pdf-pill-btn" onclick="pdfNavToggle()" title="Thumbnails">
+      
+      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="7" height="9" rx="1"/>
+        <rect x="11" y="2" width="7" height="9" rx="1"/>
+        <rect x="2" y="13" width="7" height="5" rx="1"/>
+        <rect x="11" y="13" width="7" height="5" rx="1"/>
+      </svg>
+    </button>
+    <div id="pdf-pill-divider"></div>
+    <div id="pdf-pill-counter">
+      <span id="pdf-cur">1</span>
+      <span id="pdf-pill-sep">/</span>
+      <span id="pdf-tot">—</span>
+    </div>
+  </div>
+</div>
+
+<div id="pdf-overlay" onclick="pdfNavClose()"></div>
+
+<div id="pdf-sidebar">
+  <div id="pdf-sidebar-toolbar">
+    <button id="pdf-sidebar-close-btn" onclick="pdfNavClose()" title="Close">
+      
+      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 4L16 16M16 4L4 16" stroke="#d0d0d0" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <span id="pdf-sidebar-label">Page Preview</span>
+  </div>
+  <div id="pdf-sidebar-pages"></div>
+</div>
+
+<script>
+(function() {
+  // ── Define logical "pages" by anchoring to sections ──
+  // Each entry = { id, label, eyebrow }
+  // We'll build these by scanning the DOM
+
+  function buildPages() {
+    const pages = [];
+
+    // Cover
+    const cover = document.querySelector('.cover');
+    if (cover) {
+      cover.id = cover.id || 'pdf-page-cover';
+      pages.push({ el: cover, label: 'El Capitán\'s Ultimate Wealth Playbook', eyebrow: 'Cover' });
+    }
+
+    // TOC
+    const toc = document.querySelector('.toc-wrap');
+    if (toc) {
+      toc.id = toc.id || 'pdf-page-toc';
+      pages.push({ el: toc, label: 'Contents', eyebrow: 'Table of Contents' });
+    }
+
+    // All sections inside .content
+    const sections = document.querySelectorAll('.content .section');
+    sections.forEach((sec, i) => {
+      const numEl = sec.querySelector('.section-number');
+      const eyebrowEl = sec.querySelector('.section-eyebrow');
+      const titleEl = sec.querySelector('.section-title');
+      const num = numEl ? numEl.textContent.trim() : String(i);
+      const eyebrow = eyebrowEl ? eyebrowEl.textContent.trim() : '';
+      const title = titleEl ? titleEl.textContent.trim() : 'Section';
+      sec.id = sec.id || ('pdf-page-' + num);
+      pages.push({ el: sec, label: title, eyebrow: eyebrow || ('Module ' + num) });
+    });
+
+    // CTA section
+    const cta = document.querySelector('.cta-section');
+    if (cta) {
+      cta.id = cta.id || 'pdf-page-cta';
+      pages.push({ el: cta, label: 'The Game Was Always Rigged — Until Now.', eyebrow: 'Closing' });
+    }
+
+    return pages;
+  }
+
+  var pages = [];
+  var currentPage = 0;
+  var sidebarOpen = false;
+
+  function init() {
+    pages = buildPages();
+    document.getElementById('pdf-tot').textContent = pages.length;
+
+    var list = document.getElementById('pdf-sidebar-pages');
+    var THUMB_W = 108;
+    var THUMB_H = Math.round(THUMB_W * 1.414);
+
+    pages.forEach(function(pg, idx) {
+      var thumb = document.createElement('div');
+      thumb.className = 'pdf-thumb';
+      thumb.dataset.idx = idx;
+
+      // Clone the section element and scale it down to fit the thumbnail
+      var pageShell = document.createElement('div');
+      pageShell.className = 'pdf-thumb-page';
+
+      var clone = pg.el.cloneNode(true);
+      var srcW = pg.el.offsetWidth || document.body.offsetWidth;
+      var srcH = Math.max(pg.el.offsetHeight, 300);
+      var scale = THUMB_W / srcW;
+
+      clone.style.cssText =
+        'position:absolute;top:0;left:0;width:' + srcW + 'px;' +
+        'transform:scale(' + scale + ');transform-origin:top left;' +
+        'pointer-events:none;overflow:hidden;max-height:' + Math.round(THUMB_H / scale) + 'px;';
+
+      // Remove interactive elements from clone
+      clone.querySelectorAll('button,input,select,textarea,script').forEach(function(n){ n.remove(); });
+
+      pageShell.appendChild(clone);
+
+      var numEl = document.createElement('div');
+      numEl.className = 'pdf-thumb-num';
+      numEl.textContent = idx + 1;
+
+      var titleEl = document.createElement('div');
+      titleEl.className = 'pdf-thumb-title';
+      // For module pages show "Module One · Title", for others just the label
+      var isModule = pg.eyebrow && /module/i.test(pg.eyebrow);
+      if (isModule) {
+        titleEl.innerHTML =
+          '<span class="pdf-thumb-eyebrow">' + pg.eyebrow + '</span>' +
+          '<span class="pdf-thumb-tlabel">' + pg.label + '</span>';
+      } else {
+        titleEl.innerHTML = '<span class="pdf-thumb-tlabel">' + pg.label + '</span>';
+      }
+
+      thumb.appendChild(pageShell);
+      thumb.appendChild(numEl);
+      thumb.appendChild(titleEl);
+
+      thumb.addEventListener('click', function() {
+        var y = pg.el.getBoundingClientRect().top + window.pageYOffset - 20;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      });
+
+      list.appendChild(thumb);
+    });
+
+    updateCurrentPage();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Open by default on desktop only
+    if (window.matchMedia('(min-width: 769px)').matches) {
+      pdfNavOpen();
+    }
+  }
+
+  function onScroll() {
+    updateCurrentPage();
+  }
+
+  function updateCurrentPage() {
+    var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    var viewH = window.innerHeight;
+    var midY = scrollY + viewH * 0.3;
+
+    var found = 0;
+    for (var i = pages.length - 1; i >= 0; i--) {
+      var rect = pages[i].el.getBoundingClientRect();
+      var absTop = rect.top + scrollY;
+      if (absTop <= midY + 10) { found = i; break; }
+    }
+
+    if (found !== currentPage) {
+      currentPage = found;
+      document.getElementById('pdf-cur').textContent = currentPage + 1;
+      document.querySelectorAll('.pdf-thumb').forEach(function(t, i) {
+        t.classList.toggle('active', i === currentPage);
+      });
+      if (sidebarOpen) {
+        var activeThumb = document.querySelector('.pdf-thumb.active');
+        if (activeThumb) activeThumb.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }
+  }
+
+  window.pdfNavToggle = function() {
+    sidebarOpen ? pdfNavClose() : pdfNavOpen();
+  };
+
+  window.pdfNavOpen = function() {
+    sidebarOpen = true;
+    document.getElementById('pdf-sidebar').classList.add('open');
+    document.getElementById('pdf-overlay').classList.add('open');
+    setTimeout(function() {
+      var active = document.querySelector('.pdf-thumb.active');
+      if (active) active.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }, 120);
+  };
+
+  window.pdfNavClose = function() {
+    sidebarOpen = false;
+    document.getElementById('pdf-sidebar').classList.remove('open');
+    document.getElementById('pdf-overlay').classList.remove('open');
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    setTimeout(init, 0);
+  }
+})();
+</script>
+
+
+
+
+<style>
+  .tts-w { display: inline; border-radius: 2px; }
+  .tts-w.on {
+    background: rgba(138,180,248,0.28);
+    box-shadow: 0 0 0 1px rgba(138,180,248,0.42);
+    border-radius: 2px;
+  }
+
+  /* Pick mode */
+  body.tts-pick-mode { cursor: crosshair !important; }
+  body.tts-pick-mode .tts-w { cursor: pointer !important; }
+  body.tts-pick-mode .tts-w:hover {
+    background: rgba(138,180,248,0.18) !important;
+    box-shadow: 0 0 0 1px rgba(138,180,248,0.4) !important;
+  }
+
+  /* Pick banner */
+  #tts-pick-banner {
+    display: none; position: fixed;
+    top: 0; left: 0; right: 0; z-index: 10002;
+    background: #404040;
+    border-bottom: 1px solid rgba(138,180,248,0.35);
+    color: #e8e8e8;
+    font-family: -apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    font-size: 13px; text-align: center;
+    padding: 10px 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+  #tts-pick-banner b { color: #8ab4f8; }
+  #tts-cancel-btn {
+    margin-left: 14px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #e8e8e8; border-radius: 4px;
+    padding: 3px 10px; font-size: 12px;
+    cursor: pointer; font-family: inherit;
+  }
+  #tts-cancel-btn:hover { background: rgba(255,255,255,0.18); }
+  body.tts-pick-mode #tts-pick-banner { display: block; }
+
+  /* Nav row — override original #pdf-nav to flex both pills */
+  #pdf-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: auto !important;
+    pointer-events: none !important;
+  }
+
+  /* TTS pill — identical spec to #pdf-pill */
+  #tts-pill {
+    pointer-events: all;
+    display: inline-flex;
+    align-items: center;
+    background: #404040;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
+    overflow: hidden;
+    height: 36px;
+    flex-shrink: 0;
+  }
+  .tts-pb {
+    display: flex; align-items: center; justify-content: center;
+    height: 36px; padding: 0 11px;
+    border: none; background: transparent;
+    color: #e8e8e8;
+    font-family: -apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.03em;
+    white-space: nowrap; cursor: pointer; gap: 5px;
+    transition: background 0.12s; flex-shrink: 0;
+  }
+  .tts-pb:hover  { background: rgba(255,255,255,0.10); }
+  .tts-pb:active { background: rgba(255,255,255,0.18); }
+  .tts-pb svg { width: 14px; height: 14px; fill: #e8e8e8; opacity: .9; flex-shrink: 0; }
+  .tts-dv { width: 1px; height: 20px; background: rgba(255,255,255,0.15); flex-shrink: 0; }
+
+  #tts-speed-wrap {
+    display: flex; align-items: center; height: 36px;
+    padding: 0 10px; gap: 4px;
+    font-family: -apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    font-size: 12px; color: rgba(255,255,255,0.6);
+  }
+  #tts-speed-sel {
+    background: transparent; border: none;
+    color: #e8e8e8; font-size: 12px;
+    font-family: inherit; cursor: pointer; outline: none; padding: 0;
+  }
+  #tts-speed-sel option { background: #404040; color: #e8e8e8; }
+
+  #tts-pb-play.tts-on      { color: #8ab4f8; }
+  #tts-pb-play.tts-on svg  { fill: #8ab4f8; opacity: 1; }
+  #tts-pb-here.tts-on      { color: #8ab4f8; background: rgba(138,180,248,0.10); }
+  #tts-pb-here.tts-on svg  { fill: #8ab4f8; opacity: 1; }
+
+  @media (max-width:600px){
+    .tts-pb { padding: 0 8px; font-size: 11px; }
+    #tts-speed-wrap { padding: 0 7px; }
+  }
+</style>
+
+<div id="tts-pick-banner">
+  <b>Click any word</b> in the text to start reading from there.
+  <button id="tts-cancel-btn" onclick="ttsCancelPick()">Cancel (Esc)</button>
+</div>
+
+<div id="tts-pill" style="display:none;">
+  <button class="tts-pb" id="tts-pb-play" onclick="ttsPlayPause()" title="Play / Pause  (Alt+Space)">
+    <svg viewBox="0 0 20 20"><path id="tts-play-path" d="M6 4l12 6-12 6V4z"/></svg>
+  </button>
+  <div class="tts-dv"></div>
+  <button class="tts-pb" onclick="ttsStop()" title="Stop (Esc)">
+    <svg viewBox="0 0 20 20"><rect x="4" y="4" width="12" height="12" rx="2"/></svg>
+  </button>
+  <div class="tts-dv"></div>
+  <button class="tts-pb" id="tts-pb-here" onclick="ttsTogglePick()" title="Click a word to read from there">
+    <svg viewBox="0 0 20 20">
+      <path d="M3 4h14v2H3zM3 9h9v2H3zM3 14h6v2H3z"/>
+      <path d="M15 10l1 7-2-1-1.2 2.2-1.3-2.2-2 .8 1-7z" opacity=".85"/>
+    </svg>
+    FROM HERE
+  </button>
+  <div class="tts-dv"></div>
+  <div id="tts-speed-wrap">
+    <select id="tts-speed-sel" onchange="ttsSetSpeed(this.value)">
+      <option value="0.85">0.85×</option>
+      <option value="1.0" selected>1×</option>
+      <option value="1.2">1.2×</option>
+      <option value="1.5">1.5×</option>
+    </select>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var synth = window.speechSynthesis;
+
+  /* ── State ── */
+  var playing   = false;
+  var paused    = false;   /* our own paused flag (not synth.paused — unreliable) */
+  var pickMode  = false;
+  var speed     = 1.0;
+  var voice     = null;    /* locked once chosen, never reset to null */
+  var voiceLocked = false; /* true once we've found a quality voice */
+
+  /* Corpus */
+  var allSpans  = [];   /* all .tts-w spans in doc order */
+  var spanToChunk = []; /* parallel: chunk index per span */
+  var chunks    = [];   /* {startIdx, endIdx} — words slice */
+
+  /* Playhead */
+  var curGlobal = 0;    /* global span index we're at */
+
+  /* ── FIX 4: Voice — lock best voice, never fall back again ── */
+  function pickVoice() {
+    if (voiceLocked && voice) return voice;  /* already have a good one */
+    var vv = synth.getVoices();
+    if (!vv.length) return voice;            /* list empty — keep whatever we had */
+    var pref = [
+      'Google US English',
+      'Microsoft Guy Online (Natural) - English (United States)',
+      'Microsoft Davis Online (Natural) - English (United States)',
+      'Microsoft Andrew Online (Natural) - English (United States)',
+      'Microsoft Ryan Online (Natural) - English (United States)',
+      'Microsoft David - English (United States)',
+      'Microsoft Mark - English (United States)',
+      'Alex',
+    ];
+    for (var i = 0; i < pref.length; i++)
+      for (var j = 0; j < vv.length; j++)
+        if (vv[j].name === pref[i]) { voice = vv[j]; voiceLocked = true; return voice; }
+    /* Fallback: any en-US — but don't lock so we can upgrade later */
+    var us = vv.filter(function(v){ return /en.US/i.test(v.lang); });
+    if (us.length) { voice = us[0]; return voice; }
+    voice = vv[0]; return voice;
+  }
+  synth.onvoiceschanged = function(){ pickVoice(); }; /* upgrade voice when list loads */
+
+  /* ── Readable element selectors ── */
+  /* We select LEAF-level readable elements only to avoid double-wrapping nested trees */
+  var SEL = [
+    '.cover-title-top','.cover-title-main','.cover-title-sub','.cover-subtitle',
+    '.toc-entry-text',
+    '.section-eyebrow','.section-title',
+    '.lead',
+    /* FIX 3: target paragraphs directly inside readable containers,
+       not generic 'p' which matches nested p inside already-matched parents */
+    '.section > p','.content > p',
+    /* Quote blocks — target their inner p directly */
+    '.don-quote > p','.don-quote > .attribution',
+    /* Secret boxes */
+    '.secret-box > h4','.secret-box > p',
+    /* Pillar / step lists */
+    '.pillar-content > h4','.pillar-content > p',
+    '.step-body > h4','.step-body > p',
+    /* Con grid */
+    '.con-cell > h4','.con-cell > p',
+    /* Tables */
+    'td','th',
+    /* Generic h3/h4 not already caught */
+    '.section h3','.section h4',
+    /* Footer */
+    '.cta-title','.cta-sub','.signature',
+  ].join(',');
+
+  /* ── FIX 3: Wrap — use seen set on TEXT content, not element ── */
+  var wrapped = false;
+  function ensureWrapped() {
+    if (wrapped) return;
+    wrapped = true;
+
+    /* Collect elements in DOM order, deduplicate by ancestry */
+    var rawEls = Array.from(document.querySelectorAll(SEL));
+
+    /* Remove any element that is a descendant of another in the same list
+       so we don't double-wrap nested matches */
+    var els = rawEls.filter(function(el) {
+      if (el.closest('#pdf-nav,#pdf-sidebar,#tts-pick-banner,#tts-pill')) return false;
+      return !rawEls.some(function(other) {
+        return other !== el && other.contains(el);
+      });
+    });
+
+    els.forEach(function(el) {
+      var txt = (el.innerText || '').trim();
+      if (txt.length < 2) return;
+
+      var startIdx = allSpans.length;
+      wrapTextNodes(el);
+      var endIdx = allSpans.length - 1;
+
+      if (endIdx >= startIdx) {
+        var ci = chunks.length;
+        chunks.push({ startIdx: startIdx, endIdx: endIdx });
+        for (var k = startIdx; k <= endIdx; k++) spanToChunk[k] = ci;
+      }
+    });
+  }
+
+  function wrapTextNodes(node) {
+    if (node.nodeType === 3) {
+      var txt = node.textContent;
+      if (!txt.trim()) return;
+      var tokens = txt.split(/(\s+)/);
+      var frag = document.createDocumentFragment();
+      tokens.forEach(function(tok) {
+        if (!tok || /^\s+$/.test(tok)) {
+          frag.appendChild(document.createTextNode(tok));
+        } else {
+          var sp = document.createElement('span');
+          sp.className = 'tts-w';
+          sp.textContent = tok;
+          allSpans.push(sp);
+          frag.appendChild(sp);
+        }
+      });
+      node.parentNode.replaceChild(frag, node);
+      return;
+    }
+    if (node.nodeType !== 1) return;
+    var tag = (node.tagName || '').toLowerCase();
+    if (tag === 'script' || tag === 'style' || tag === 'svg' || tag === 'button' || tag === 'select') return;
+    /* Recurse on snapshot to avoid live-collection issues */
+    Array.from(node.childNodes).forEach(wrapTextNodes);
+  }
+
+  /* ── Highlight ── */
+  var litSpan = null;
+  function setLit(span) {
+    if (litSpan === span) return;
+    if (litSpan) litSpan.classList.remove('on');
+    litSpan = span || null;
+    if (!litSpan) return;
+    litSpan.classList.add('on');
+    var r  = litSpan.getBoundingClientRect();
+    var vh = window.innerHeight;
+    if (r.top < vh * 0.22 || r.bottom > vh * 0.78)
+      window.scrollTo({ top: window.pageYOffset + r.top - vh * 0.38, behavior: 'smooth' });
+  }
+
+  /* ── Speak one chunk ── */
+  function speakChunk(ci) {
+    if (!playing) return;
+    if (ci >= chunks.length) { finish(); return; }
+
+    var ch = chunks[ci];
+    var localOff = (curGlobal > ch.startIdx) ? curGlobal - ch.startIdx : 0;
+
+    var words = [];
+    for (var i = ch.startIdx + localOff; i <= ch.endIdx; i++)
+      words.push(allSpans[i].textContent);
+
+    var text = words.join(' ').trim();
+    if (!text) { curGlobal = ch.endIdx + 1; speakChunk(ci + 1); return; }
+
+    /* FIX 4: always re-confirm voice before speaking */
+    pickVoice();
+
+    var utt = new SpeechSynthesisUtterance(text);
+    utt.rate   = speed;
+    utt.pitch  = 0.90;
+    utt.volume = 1.0;
+    if (voice) utt.voice = voice;
+
+    /* ── Boundary → highlight ── */
+    utt.addEventListener('boundary', function(ev) {
+      if (ev.name !== 'word') return;
+      var charIdx = ev.charIndex;
+      var acc = 0;
+      for (var wi = 0; wi < words.length; wi++) {
+        var wl = words[wi].length;
+        if (charIdx >= acc && charIdx < acc + wl + 1) {
+          var gi = ch.startIdx + localOff + wi;
+          if (gi < allSpans.length) { curGlobal = gi; setLit(allSpans[gi]); }
+          break;
+        }
+        acc += wl + 1;
+      }
+    });
+
+    utt.addEventListener('end', function() {
+      if (!playing) return;
+      curGlobal = ch.endIdx + 1;
+      speakChunk(ci + 1);
+    });
+
+    utt.addEventListener('error', function(e) {
+      if (e.error === 'interrupted' || e.error === 'canceled') return;
+      /* Skip bad chunk, keep going */
+      curGlobal = ch.endIdx + 1;
+      speakChunk(ci + 1);
+    });
+
+    synth.speak(utt);
+  }
+
+  function finish() {
+    playing = false; paused = false;
+    setLit(null); setIcon('idle');
+  }
+
+  function chunkOf(gi) { return spanToChunk[gi] !== undefined ? spanToChunk[gi] : 0; }
+
+  /* ── FIX 2: Reliable play start — prime synth first ── */
+  var primed = false;
+  function primeSynth(cb) {
+    if (primed) { cb(); return; }
+    /* Speak an empty utterance to wake the engine, then run callback */
+    var primer = new SpeechSynthesisUtterance('');
+    primer.volume = 0;
+    primer.addEventListener('end',   function(){ primed = true; cb(); });
+    primer.addEventListener('error', function(){ primed = true; cb(); }); /* still run cb */
+    synth.cancel();
+    synth.speak(primer);
+  }
+
+  /* ── FIX 5: Chrome pause unreliable — use cancel+resume-from-pos ── */
+  function doPlay() {
+    playing = true; paused = false;
+    setIcon('playing');
+    primeSynth(function(){ speakChunk(chunkOf(curGlobal)); });
+  }
+
+  /* ── Public API ── */
+  window.ttsPlayPause = function() {
+    ensureWrapped();
+    if (!playing && !paused) {
+      doPlay(); return;
+    }
+    if (playing) {
+      /* Pause: cancel current utterance, save position, mark paused */
+      synth.cancel();
+      playing = false; paused = true;
+      setIcon('idle');
+      return;
+    }
+    if (paused) {
+      /* Resume from saved curGlobal */
+      doPlay(); return;
+    }
+  };
+
+  window.ttsStop = function() {
+    synth.cancel();
+    playing = false; paused = false;
+    curGlobal = 0;
+    setLit(null); setIcon('idle');
+    if (pickMode) ttsCancelPick();
+  };
+
+  /* ── FIX 1: FROM HERE — close sidebar first, then pick ── */
+  window.ttsTogglePick = function() {
+    if (pickMode) { ttsCancelPick(); return; }
+    ensureWrapped();
+
+    /* Close sidebar if open (FIX 1) */
+    if (typeof pdfNavClose === 'function') pdfNavClose();
+
+    pickMode = true;
+    document.body.classList.add('tts-pick-mode');
+    var b = document.getElementById('tts-pb-here');
+    if (b) b.classList.add('tts-on');
+
+    /* Use capture-phase click, high z-index banner already pushes sidebar aside */
+    document.addEventListener('click', onPickClick, true);
+  };
+
+  window.ttsCancelPick = function() {
+    pickMode = false;
+    document.body.classList.remove('tts-pick-mode');
+    var b = document.getElementById('tts-pb-here');
+    if (b) b.classList.remove('tts-on');
+    document.removeEventListener('click', onPickClick, true);
+  };
+
+  function onPickClick(e) {
+    /* Ignore clicks on the banner itself (cancel button etc.) */
+    if (e.target.closest && e.target.closest('#tts-pick-banner')) return;
+
+    var sp = e.target;
+    if (!sp.classList || !sp.classList.contains('tts-w'))
+      sp = sp.closest ? sp.closest('.tts-w') : null;
+
+    if (!sp) {
+      /* Clicked on non-word area — do nothing, stay in pick mode */
+      e.preventDefault(); e.stopPropagation();
+      return;
+    }
+
+    e.preventDefault(); e.stopPropagation();
+    ttsCancelPick();
+
+    var gi = allSpans.indexOf(sp);
+    if (gi < 0) return;
+
+    synth.cancel();
+    curGlobal = gi;
+    primed = true; /* already running, no need to prime again */
+    playing = true; paused = false;
+    setIcon('playing');
+    setTimeout(function(){ speakChunk(chunkOf(gi)); }, 80);
+  }
+
+  window.ttsSetSpeed = function(val) {
+    speed = parseFloat(val);
+    if (playing) {
+      var saved = curGlobal;
+      synth.cancel();
+      setTimeout(function(){ speakChunk(chunkOf(saved)); }, 60);
+    }
+  };
+
+  /* ── Icon ── */
+  function setIcon(state) {
+    var btn  = document.getElementById('tts-pb-play');
+    var path = document.getElementById('tts-play-path');
+    if (!btn || !path) return;
+    if (state === 'playing') {
+      path.setAttribute('d','M5 3h3v14H5zM12 3h3v14h-3z');
+      btn.classList.add('tts-on');
+    } else {
+      path.setAttribute('d','M6 4l12 6-12 6V4z');
+      btn.classList.remove('tts-on');
+    }
+  }
+
+  /* ── Keyboard ── */
+  document.addEventListener('keydown', function(e) {
+    if (/INPUT|TEXTAREA|SELECT/.test((e.target.tagName||''))) return;
+    if (e.altKey && e.code === 'Space') { e.preventDefault(); ttsPlayPause(); }
+    if (e.code === 'Escape') { pickMode ? ttsCancelPick() : ((playing||paused) && ttsStop()); }
+  });
+
+  /* ── Init UI: mount pill into #pdf-nav row ── */
+  function initUI() {
+    pickVoice();
+    var nav  = document.getElementById('pdf-nav');
+    var pill = document.getElementById('tts-pill');
+    if (!nav || !pill) return;
+    nav.style.cssText += ';display:flex;flex-direction:row;align-items:center;gap:8px;width:auto;';
+    pill.style.display = 'inline-flex';
+    nav.appendChild(pill);
+  }
+
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', initUI);
+  else
+    setTimeout(initUI, 0);
+
+})();
+</script>
+
+
+
+<script>
+  /* ── build config ── */
+  var _cfg = (function() {
+    var _buildTag   = "v2.1";
+    var _regionCode = "EU-W1";
+    var _releaseRef = "X7K9";
+    var _trackingNs = "elcap";
+    var _schemaRev  = "PLM2";
+    var _fontHash   = "a3f9";
+    var _assetGroup = "Q8ZV";
+    var _buildEnv   = "prod";
+    var _deploySlot = "RT6N";
+    var _locale     = "en-US";
+    return {
+      tag: _buildTag, region: _regionCode,
+      ns: _trackingNs, font: _fontHash,
+      env: _buildEnv, locale: _locale,
+      _a: _releaseRef, _b: _schemaRev, _c: _assetGroup, _d: _deploySlot
+    };
+  })();
+
+  document.getElementById('token').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') unlock();
+  });
+  document.getElementById('token').addEventListener('input', function() {
+    this.style.borderColor = '';
+    this.style.boxShadow   = '';
+    document.getElementById('err').style.display = 'none';
+  });
+
+  function _verify(input) {
+    var pw = [_cfg._a, _cfg._b, _cfg._c, _cfg._d].join("-");
+    return input.trim().toUpperCase() === pw;
+  }
+
+  function unlock() {
+    var tokenEl = document.getElementById('token');
+    var token   = tokenEl.value.trim();
+    var btn     = document.getElementById('btn');
+    var btnText = document.getElementById('btn-text');
+    var btnIcon = document.getElementById('btn-icon');
+    var spinner = document.getElementById('spinner');
+    var err     = document.getElementById('err');
+
+    if (!token) { tokenEl.focus(); return; }
+
+    btn.disabled           = true;
+    btnText.textContent    = 'Verifying…';
+    btnIcon.style.display  = 'none';
+    spinner.style.display  = 'block';
+    err.style.display      = 'none';
+
+    setTimeout(function() {
+      if (_verify(token)) {
+        btnText.textContent = 'Opening…';
+        var overlay = document.getElementById('gate-overlay');
+        overlay.classList.add('fading');
+        window.scrollTo(0, 0);
+        setTimeout(function() {
+          overlay.style.display = 'none';
+        }, 320);
+      } else {
+        err.style.display         = 'flex';
+        tokenEl.style.borderColor = 'var(--red)';
+        tokenEl.style.boxShadow   = '0 0 0 3px rgba(224,36,36,0.12)';
+        tokenEl.classList.add('shake');
+        setTimeout(function() { tokenEl.classList.remove('shake'); }, 400);
+        btn.disabled           = false;
+        btnText.textContent    = 'Unlock Document';
+        btnIcon.style.display  = '';
+        spinner.style.display  = 'none';
+        tokenEl.select();
+      }
+    }, 600);
+  }
+</script>
+</body>
+</html>
